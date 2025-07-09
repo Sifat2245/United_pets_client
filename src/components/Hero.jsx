@@ -22,7 +22,7 @@ const Hero = () => {
         transition={{ duration: 1, ease: "easeOut" }}
       >
         <motion.h1
-          className="text-2xl md:text-4xl lg:text-5xl"
+          className="text-2xl md:text-4xl lg:text-5xl pb-3"
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.3 }}
@@ -30,7 +30,7 @@ const Hero = () => {
           <span className="font-bold">WELCOME TO</span> UNITED PETS
         </motion.h1>
         <motion.p
-          className="font-semibold text-sm md:text-lg pb-4"
+          className="font-semibold text-sm md:text-lg"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6 }}
