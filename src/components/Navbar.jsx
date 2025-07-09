@@ -26,7 +26,7 @@ const Navbar = () => {
             href="/"
             className="text-gray-800 text-2xl font-bold flex items-center"
           >
-            <img src={Logo} alt="" className="h-14 w-40" />
+            <img src={Logo} alt="" className="h-12 w-32 md:h-14 md:w-40" />
           </a>
         </div>
 
@@ -42,7 +42,7 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center space-x-10">{navLinks}</div>
+        <div className="hidden md:flex items-center space-x-10 font-semibold">{navLinks}</div>
 
         {/* Login and Sign Up Buttons */}
         <div className="hidden md:flex items-center space-x-4">
