@@ -89,7 +89,7 @@ const Footer = () => {
             </ul>
           </div>
         </div>
-        <div className="text-center">
+        <div className="text-center text-xs font-semibold">
           © 2024 - 2028{" "}
           <a href="#" className="text-blue-600 hover:underline">
             UNITEDPETS JOOMLA.

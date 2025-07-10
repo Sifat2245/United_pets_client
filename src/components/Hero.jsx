@@ -12,7 +12,7 @@ const Hero = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
-      className="relative min-h-[75vh] text-white text-center flex justify-center items-center"
+      className="relative min-h-[75vh] bg-fixed text-white text-center flex justify-center items-center overflow-hidden"
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <motion.div
@@ -42,7 +42,7 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.9 }}
-          className="bg-[#018AE0] px-8 py-2 md:px-12 md:py-3 rounded-4xl font-semibold hover:bg-[#018AE0]"
+          className="bg-[#018AE0] px-8 py-2 md:px-12 md:py-3 rounded-4xl font-semibold hover:bg-[#0174e0] cursor-pointer"
         >
           CONTACT US
         </motion.button>

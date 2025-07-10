@@ -1,21 +1,97 @@
 import { Menu, X } from "lucide-react";
-import { useState } from "react";
+import { use, useState } from "react";
 import Logo from "../assets/logo.png";
 import { NavLink } from "react-router";
+import SignupModal from "./SignupModal";
+import LoginModal from "./LoginModal";
+import { AuthContext } from "../context/AuthContext";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const { user, logOut } = use(AuthContext);
+
+  const openSignupModal = () => {
+    setIsLoginModalOpen(false);
+    setIsSignupModalOpen(true);
+  };
+
+  const closeSignupModal = () => {
+    setIsSignupModalOpen(false);
+  };
+
+  const openLoginModal = () => {
+    setIsSignupModalOpen(false);
+    setIsLoginModalOpen(true);
+  };
+
+  const closeLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
 
   const navLinks = (
     <>
-      <NavLink to={"/"} className={({isActive}) =>`hover:text-[#D61C62] transition-all duration-300 ${isActive? 'text-[#D61C62]':''}`}>
+      <NavLink
+        to={"/"}
+        className={({ isActive }) =>
+          `hover:text-[#D61C62] transition-all duration-300 ${
+            isActive ? "text-[#D61C62]" : ""
+          }`
+        }
+      >
         Home
       </NavLink>
-      <NavLink to={"/Adopt"} className={({isActive}) =>`hover:text-[#D61C62] transition-all duration-300 ${isActive? 'text-[#D61C62]':''}`}>Adopt</NavLink>
-      <NavLink to={"/services"} className={({isActive}) =>`hover:text-[#D61C62] transition-all duration-300 ${isActive? 'text-[#D61C62]':''}`}>Services</NavLink>
-      <NavLink to={"/about"} className={({isActive}) =>`hover:text-[#D61C62] transition-all duration-300 ${isActive? 'text-[#D61C62]':''}`}>About</NavLink>
-      <NavLink to={"/gallery"} className={({isActive}) =>`hover:text-[#D61C62] transition-all duration-300 ${isActive? 'text-[#D61C62]':''}`}>Gallery</NavLink>
-      <NavLink to={"/contact"} className={({isActive}) =>`hover:text-[#D61C62] transition-all duration-300 ${isActive? 'text-[#D61C62]':''}`}>Contact</NavLink>
+      <NavLink
+        to={"/Adopt"}
+        className={({ isActive }) =>
+          `hover:text-[#D61C62] transition-all duration-300 ${
+            isActive ? "text-[#D61C62]" : ""
+          }`
+        }
+      >
+        Adopt
+      </NavLink>
+      <NavLink
+        to={"/services"}
+        className={({ isActive }) =>
+          `hover:text-[#D61C62] transition-all duration-300 ${
+            isActive ? "text-[#D61C62]" : ""
+          }`
+        }
+      >
+        Services
+      </NavLink>
+      <NavLink
+        to={"/about"}
+        className={({ isActive }) =>
+          `hover:text-[#D61C62] transition-all duration-300 ${
+            isActive ? "text-[#D61C62]" : ""
+          }`
+        }
+      >
+        About
+      </NavLink>
+      <NavLink
+        to={"/gallery"}
+        className={({ isActive }) =>
+          `hover:text-[#D61C62] transition-all duration-300 ${
+            isActive ? "text-[#D61C62]" : ""
+          }`
+        }
+      >
+        Gallery
+      </NavLink>
+      <NavLink
+        to={"/contact"}
+        className={({ isActive }) =>
+          `hover:text-[#D61C62] transition-all duration-300 ${
+            isActive ? "text-[#D61C62]" : ""
+          }`
+        }
+      >
+        Contact
+      </NavLink>
     </>
   );
   return (
@@ -42,16 +118,34 @@ const Navbar = () => {
         </div>
 
         {/* Desktop Navigation Links */}
-        <div className="hidden md:flex items-center space-x-10 font-semibold">{navLinks}</div>
+        <div className="hidden md:flex items-center space-x-10 font-semibold">
+          {navLinks}
+        </div>
 
-        {/* Login and Sign Up Buttons */}
         <div className="hidden md:flex items-center space-x-4">
-          <button className="px-4 py-2 rounded-md text-gray-700 border border-gray-300 hover:bg-gray-100 transition-colors duration-200">
-            Login
-          </button>
-          <button className="px-4 py-2 rounded-md bg-[#018AE0] text-white hover:bg-[#0169e0] transition-colors duration-200 shadow-md">
-            Sign Up
-          </button>
+          {user ? (
+            <button
+              className="px-4 py-2 rounded-md text-gray-700 font-semibold border border-gray-500 hover:bg-gray-100 transition-colors duration-200"
+              onClick={() => logOut()}
+            >
+              Logout
+            </button>
+          ) : (
+            <>
+              <button
+                className="px-4 py-2 rounded-md text-gray-700 font-semibold border border-gray-500 hover:bg-gray-100 transition-colors duration-200"
+                onClick={openLoginModal}
+              >
+                Login
+              </button>
+              <button
+                className="px-4 py-2 rounded-md text-white bg-[#018AE0] font-semibold border border-[#018AE0] hover:bg-[#0174e0] transition-colors duration-200"
+                onClick={openSignupModal}
+              >
+                Signup
+              </button>
+            </>
+          )}
         </div>
       </div>
 
@@ -82,17 +176,46 @@ const Navbar = () => {
             <div className="flex flex-col p-4 space-y-4">
               {navLinks}
               <div className="pt-4 border-t border-gray-200 space-y-2">
-                <button className="w-full px-4 py-2 rounded-md text-gray-700 border border-gray-300 hover:bg-gray-100 transition-colors duration-200">
-                  Login
-                </button>
-                <button className="w-full px-4 py-2 rounded-md bg-[#018AE0] text-white hover:bg-[#0169e0] transition-colors duration-200 shadow-md">
-                  Sign Up
-                </button>
+                {user ? (
+                  <button
+                    className="px-4 py-2 rounded-md text-gray-700 font-semibold border border-gray-500 hover:bg-gray-100 transition-colors duration-200"
+                    onClick={() => logOut()}
+                  >
+                    Logout
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      className="px-4 py-2 rounded-md text-gray-700 font-semibold border border-gray-500 hover:bg-gray-100 transition-colors duration-200"
+                      onClick={openLoginModal}
+                    >
+                      Login
+                    </button>
+                    <button
+                      className="px-4 py-2 rounded-md text-white bg-[#018AE0] font-semibold border border-[#018AE0] hover:bg-[#0174e0] transition-colors duration-200"
+                      onClick={openSignupModal}
+                    >
+                      Signup
+                    </button>
+                  </>
+                )}
               </div>
             </div>
           </div>
         </>
       )}
+
+      <SignupModal
+        isOpen={isSignupModalOpen}
+        onClose={closeSignupModal}
+        onOpenLogin={openLoginModal}
+      ></SignupModal>
+      <LoginModal
+        isOpen={isLoginModalOpen}
+        onClose={closeLoginModal}
+        onOpenSignup={openSignupModal}
+      ></LoginModal>
+     
     </nav>
   );
 };
