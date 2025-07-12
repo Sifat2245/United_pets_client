@@ -226,16 +226,7 @@ const Navbar = () => {
         </>
       )}
 
-      <SignupModal
-        isOpen={isSignupModalOpen}
-        onClose={closeSignupModal}
-        onOpenLogin={openLoginModal}
-      ></SignupModal>
-      <LoginModal
-        isOpen={isLoginModalOpen}
-        onClose={closeLoginModal}
-        onOpenSignup={openSignupModal}
-      ></LoginModal>
+      
     </nav>
   
   
@@ -354,8 +345,9 @@ const Navbar = () => {
           </div>
         </>
       )}
+    </motion.nav>
 
-      <SignupModal
+    <SignupModal
         isOpen={isSignupModalOpen}
         onClose={closeSignupModal}
         onOpenLogin={openLoginModal}
@@ -365,7 +357,6 @@ const Navbar = () => {
         onClose={closeLoginModal}
         onOpenSignup={openSignupModal}
       ></LoginModal>
-    </motion.nav>
   </>
   );
 };

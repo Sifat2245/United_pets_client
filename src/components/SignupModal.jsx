@@ -1,10 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion"; //eslint-disable-line
 import { UserPlus, X, ImageIcon } from "lucide-react";
-import { FaGoogle, FaTwitter } from "react-icons/fa";
-import React, { use, useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import SocialLogin from "./SocialLogin";
 import { AuthContext } from "../context/AuthContext";
+import axios from "axios";
+import useAxios from "../hooks/useAxios";
 
 const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
   const {
@@ -14,29 +15,69 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
     formState: { errors },
     reset,
   } = useForm();
-  const { createUser } = use(AuthContext);
+  const { createUser, updateUser } = useContext(AuthContext);
   const [profileImagePreview, SetProfileImagePreview] = useState(null);
   const [statusMessage, setStatusMessage] = useState("");
   const password = watch("password", "");
+  const [profileImage, setProfileImage] = useState('')
+  const axiosInstance = useAxios()
 
-  const handleImageChange = (e) => {
+  const handleImageChange = async (e) => {
     const file = e.target.files[0];
+    console.log(file);
     if (file) {
       SetProfileImagePreview(URL.createObjectURL(file));
     } else {
       SetProfileImagePreview(null);
     }
+
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "user_profile_image");
+    formData.append("cloud_name", "djoytexuc");
+
+    const res = await axios.post(
+      "https://api.cloudinary.com/v1_1/djoytexuc/image/upload",
+      formData
+    );
+    // console.log(res.data);
+    setProfileImage(res.data.url)
   };
 
   const onSubmit = (data) => {
     setStatusMessage("");
     createUser(data.email, data.password)
-      .then((result) => {
+      .then(async(result) => {
         console.log("account created", result.user);
-        reset();
-        SetProfileImagePreview(null);
-        setStatusMessage("");
-        onClose();
+        //update user
+        const userProfile = {
+          displayName: data.name,
+          photoURL: profileImage,
+        };
+
+        updateUser(userProfile)
+          .then(() => {
+            console.log("profile updated successfully");
+            reset();
+            SetProfileImagePreview(null);
+            setStatusMessage("");
+            onClose();
+          })
+          .catch((error) => {
+            console.log(error.message);
+          });
+
+
+          const userInfo = {
+            email: data.email,
+            name: data.name,
+            photoURL: profileImage,
+            role: 'user',
+            created_at: new Date().toISOString()
+          }
+
+          const userRes = await axiosInstance.post('/users', userInfo)
+          console.log('user stored',userRes.data);
       })
       .catch((error) => {
         console.log("error found", error);
@@ -69,7 +110,7 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={onClose}
+              onClick={() => onClose()}
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 p-1 rounded-full focus:outline-none focus:ring-2 focus:[#018AE0]"
               aria-label="Close modal"
             >
@@ -102,16 +143,18 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
                         <ImageIcon className="h-12 w-12" />
                       </div>
                     )}
-                    <input
-                      type="file"
-                      id="profileImage"
-                      name="profileImage"
-                      accept="image/*"
-                      onChange={handleImageChange}
-                      className="hidden"
-                      {...register("profileImage")}
-                    />
                   </label>
+
+                  {/* This must be outside the label */}
+                  <input
+                    type="file"
+                    id="profileImage" // ✅ MUST match label htmlFor
+                    name="profileImage"
+                    accept="image/*"
+                    onChange={handleImageChange}
+                    className="hidden"
+                  />
+
                   {errors.profileImage && (
                     <p className="mt-1 text-sm text-red-600">
                       {errors.profileImage.message}
@@ -128,7 +171,6 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
                   </label>
                   <input
                     type="text"
-                    id="name"
                     placeholder="Full Name"
                     className={`w-full px-4 py-2 border-b-2 ${
                       errors.name ? "border-red-500" : "border-blue-300"
@@ -148,7 +190,6 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
                   </label>
                   <input
                     type="email"
-                    id="email"
                     placeholder="Email Address"
                     className={`w-full px-4 py-2 border-b-2 ${
                       errors.email ? "border-red-500" : "border-blue-300"
@@ -174,7 +215,6 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
                   </label>
                   <input
                     type="password"
-                    id="password"
                     placeholder="Password"
                     className={`w-full px-4 py-2 border-b-2 ${
                       errors.password ? "border-red-500" : "border-blue-300"
@@ -200,7 +240,6 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
                   </label>
                   <input
                     type="password"
-                    id="confirmPassword"
                     placeholder="Confirm Password"
                     className={`w-full px-4 py-2 border-b-2 ${
                       errors.confirmPassword
@@ -253,9 +292,7 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
               </div>
 
               <div className="space-y-3">
-                <SocialLogin
-                onClose={onClose}
-                ></SocialLogin>
+                <SocialLogin onClose={onClose}></SocialLogin>
               </div>
 
               <p className="mt-6 text-center text-gray-600 text-sm">

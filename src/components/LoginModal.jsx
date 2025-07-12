@@ -54,7 +54,7 @@ const LoginModal = ({ isOpen, onClose, onOpenSignup }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={onClose}
+              onClick={()=> onClose()}
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-[#018AE0]"
               aria-label="Close modal"
             >
