@@ -7,11 +7,13 @@ import {
   signInWithEmailAndPassword,
   signInWithPopup,
   signOut,
+  TwitterAuthProvider,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase_init";
 
 const googleProvider = new GoogleAuthProvider();
+const twitterProvider = new TwitterAuthProvider()
 
 const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
@@ -31,6 +33,11 @@ const AuthProvider = ({ children }) => {
     setLoading(true);
     return signInWithPopup(auth, googleProvider);
   };
+
+  const signInWithTwitter = () =>{
+    setLoading(true)
+    return signInWithPopup(auth, twitterProvider)
+  }
 
   const logOut = () => {
     setLoading(true);
@@ -60,6 +67,7 @@ const AuthProvider = ({ children }) => {
     loading,
     user,
     updateUser,
+    signInWithTwitter
   };
 
   return (
