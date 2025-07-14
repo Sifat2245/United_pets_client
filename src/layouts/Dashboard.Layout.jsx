@@ -152,7 +152,7 @@ const DashboardLayout = () => {
           </NavLink>
 
           <NavLink
-            to="users"
+            to="all-users"
             className={({ isActive }) =>
               `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
                 isActive
@@ -167,7 +167,7 @@ const DashboardLayout = () => {
           </NavLink>
 
           <NavLink
-            to="pets"
+            to="all-pets"
             className={({ isActive }) =>
               `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
                 isActive
@@ -182,7 +182,7 @@ const DashboardLayout = () => {
           </NavLink>
 
           <NavLink
-            to="donations"
+            to="all-donations"
             className={({ isActive }) =>
               `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
                 isActive
@@ -197,7 +197,7 @@ const DashboardLayout = () => {
           </NavLink>
 
           <NavLink
-            to="profile"
+            to="my-profile"
             className={({ isActive }) =>
               `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
                 isActive

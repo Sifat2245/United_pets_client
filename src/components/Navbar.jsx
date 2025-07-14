@@ -6,30 +6,39 @@ import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
 import { AuthContext } from "../context/AuthContext";
 import { motion } from "framer-motion"; //eslint-disable-line
+import { useModal } from "../context/ModalProvider";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  // const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
+  // const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { user, logOut } = use(AuthContext);
+const {
+  isLoginModalOpen,
+  isSignupModalOpen,
+  openLoginModal,
+  openSignupModal,
+  closeLoginModal,
+  closeSignupModal,
+} = useModal();
 
-  const openSignupModal = () => {
-    setIsLoginModalOpen(false);
-    setIsSignupModalOpen(true);
-  };
+  // const openSignupModal = () => {
+  //   setIsLoginModalOpen(false);
+  //   setIsSignupModalOpen(true);
+  // };
 
-  const closeSignupModal = () => {
-    setIsSignupModalOpen(false);
-  };
+  // const closeSignupModal = () => {
+  //   setIsSignupModalOpen(false);
+  // };
 
-  const openLoginModal = () => {
-    setIsSignupModalOpen(false);
-    setIsLoginModalOpen(true);
-  };
+  // const openLoginModal = () => {
+  //   setIsSignupModalOpen(false);
+  //   setIsLoginModalOpen(true);
+  // };
 
-  const closeLoginModal = () => {
-    setIsLoginModalOpen(false);
-  };
+  // const closeLoginModal = () => {
+  //   setIsLoginModalOpen(false);
+  // };
 
   const [showSticky, setShowSticky] = useState(false);
 

@@ -10,6 +10,15 @@ import DashboardLayout from "../layouts/Dashboard.Layout";
 import Overview from "../pages/Dashboard/Overview";
 import AddPet from "../pages/Dashboard/AddPet";
 import MyAddedPets from "../pages/Dashboard/MyAddedPets";
+import AdoptionRequest from "../pages/Dashboard/AdoptionRequest";
+import CreateCampagin from "../pages/Dashboard/CreateCampagin";
+import MyCampaigns from "../pages/Dashboard/MyCampaigns";
+import MyDonations from "../pages/Dashboard/MyDonations";
+import Users from "../pages/Dashboard/Users";
+import AllPets from "../pages/Dashboard/AllPets";
+import AllDonations from "../pages/Dashboard/AllDonations";
+import MyProfile from "../pages/Dashboard/MyProfile";
+import PrivateRoute from "../routes/PrivateRoute";
 
 export const router = createBrowserRouter([
     {
@@ -44,7 +53,9 @@ export const router = createBrowserRouter([
     },
     {
         path: '/dashboard',
-        Component: DashboardLayout,
+        element: <PrivateRoute>
+            <DashboardLayout></DashboardLayout>
+        </PrivateRoute>,
         children: [
             {
                 index: true,
@@ -57,6 +68,38 @@ export const router = createBrowserRouter([
             {
                 path: 'my-pets',
                 Component: MyAddedPets
+            },
+            {
+                path: 'adoption-requests',
+                Component: AdoptionRequest
+            },
+            {
+                path: 'create-campaign',
+                Component: CreateCampagin
+            },
+            {
+                path: 'my-campaigns', 
+                Component: MyCampaigns
+            },
+            {
+                path: 'my-donations',
+                Component: MyDonations
+            },
+            {
+                path: 'all-users',
+                Component: Users
+            },
+            {
+                path: 'all-pets',
+                Component: AllPets
+            },
+            {
+                path: 'all-donations',
+                Component: AllDonations
+            },
+            {
+                path: 'my-profile',
+                Component: MyProfile
             }
         ]
     }

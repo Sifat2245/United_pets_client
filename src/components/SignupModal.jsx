@@ -34,13 +34,13 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "user_profile_image");
-    formData.append("cloud_name", "djoytexuc");
+    formData.append("cloud_name", `${import.meta.env.VITE_Cloudinary_cloudname}`);
 
     const res = await axios.post(
-      "https://api.cloudinary.com/v1_1/djoytexuc/image/upload",
+      `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_Cloudinary_cloudname}/image/upload`,
       formData
     );
-    // console.log(res.data);
+    console.log(res.data);
     setProfileImage(res.data.url)
   };
 
