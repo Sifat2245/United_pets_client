@@ -12,7 +12,7 @@ const Hero = () => {
         backgroundSize: "cover",
         backgroundPosition: "center",
       }}
-      className="relative min-h-[75vh] bg-fixed text-white text-center flex justify-center items-center overflow-hidden"
+      className="relative min-h-[80vh] bg-fixed text-white text-center flex justify-center items-center overflow-hidden"
     >
       <div className="absolute inset-0 bg-black opacity-50"></div>
       <motion.div
