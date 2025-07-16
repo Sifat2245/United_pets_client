@@ -10,8 +10,6 @@ import { useModal } from "../context/ModalProvider";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  // const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-  // const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const { user, logOut } = use(AuthContext);
 const {
   isLoginModalOpen,
@@ -22,23 +20,6 @@ const {
   closeSignupModal,
 } = useModal();
 
-  // const openSignupModal = () => {
-  //   setIsLoginModalOpen(false);
-  //   setIsSignupModalOpen(true);
-  // };
-
-  // const closeSignupModal = () => {
-  //   setIsSignupModalOpen(false);
-  // };
-
-  // const openLoginModal = () => {
-  //   setIsSignupModalOpen(false);
-  //   setIsLoginModalOpen(true);
-  // };
-
-  // const closeLoginModal = () => {
-  //   setIsLoginModalOpen(false);
-  // };
 
   const [showSticky, setShowSticky] = useState(false);
 
