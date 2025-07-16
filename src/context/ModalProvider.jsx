@@ -1,4 +1,3 @@
-// context/ModalContext.js
 import { createContext, useContext, useState } from "react";
 
 const ModalContext = createContext();

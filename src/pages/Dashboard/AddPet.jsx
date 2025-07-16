@@ -15,6 +15,7 @@ import Code from "@tiptap/extension-code";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
 import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router";
 
 const categoryOptions = [
   { value: "Dog", label: "Dog" },
@@ -43,6 +44,7 @@ const AddPet = () => {
   const [vaccinated, setVaccinated] = useState(null);
   const axiosSecure = useAxiosSecure();
   const { user } = use(AuthContext);
+  const navigate = useNavigate()
 
   const {
     register,
@@ -118,6 +120,7 @@ const AddPet = () => {
         });
         console.log("Pet updated:", res.data);
         reset();
+        navigate('/dashboard/my-pets')
         setImageUrl(null);
         setSelectedCategory(null);
         setCustomCategory("");
