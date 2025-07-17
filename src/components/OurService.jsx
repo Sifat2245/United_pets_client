@@ -107,7 +107,7 @@ const OurService = () => {
   };
 
   return (
-    <div className="w-3/4 mx-auto py-18">
+    <div className="w-3/4 mx-auto py-24">
       <div className="container mx-auto px-4">
         <div className="text-center mb-12">
           <p className="text-sm text-gray-500 uppercase tracking-widest mb-2">

@@ -4,6 +4,10 @@ import OurService from '../components/OurService';
 import Categories from '../components/Categories';
 import AboutUs from '../components/AboutUs';
 import Adoption from '../components/Adoption';
+import Gallery from '../components/Gallery';
+import OurFeature from '../components/OurFeature';
+import OurTeam from '../components/OurTeam';
+import CountBar from '../components/CountBar';
 
 const Home = () => {
     return (
@@ -13,6 +17,10 @@ const Home = () => {
             <OurService></OurService>
             <AboutUs></AboutUs>
             <Adoption></Adoption>
+            <Gallery></Gallery>
+            <OurFeature></OurFeature>
+            <OurTeam></OurTeam>
+            <CountBar></CountBar>
         </div>
     );
 };

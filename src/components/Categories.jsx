@@ -30,7 +30,7 @@ const Categories = () => {
   };
 
   return (
-    <div className="w-full mx-auto max-w-6xl text-center bg-white rounded-3xl p-6 sm:p-8 lg:pt-18">
+    <div className="w-full mx-auto max-w-6xl text-center bg-white rounded-3xl p-6 sm:p-8 lg:pt-24">
       <p className="text-sm text-gray-500 uppercase tracking-widest mb-2">
         — CATEGORIES —
       </p>

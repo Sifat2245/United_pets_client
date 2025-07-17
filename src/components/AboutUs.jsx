@@ -83,7 +83,7 @@ const AboutUs = () => {
   return (
     <div
       style={{ backgroundImage: `url(${aboutBg})` }}
-      className="bg-no-repeat bg-center bg-cover py-16 sm:py-24 relative"
+      className="bg-no-repeat bg-center bg-cover py-16 sm:pb-24 relative"
     >
       <div className="absolute inset-0 bg-white/40 z-0"></div>
 

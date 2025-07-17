@@ -71,7 +71,7 @@ const Adoption = () => {
       style={{
         backgroundImage: `url(${adoptionBg})`,
       }}
-      className="bg-no-repeat bg-center bg-cover py-16 sm:py-24 relative bg-fixed"
+      className="bg-no-repeat bg-center bg-cover py-16 sm:py-24 relative bg-fixed mb-24"
     >
       <div className="absolute inset-0 bg-neutral-800/85 z-0"></div>
 
