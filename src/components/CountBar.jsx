@@ -57,7 +57,7 @@ const CountBar = () => {
       style={{
         backgroundImage: `url(${countBar})`,
       }}
-      className="py-20 bg-cover bg-center relative bg-fixed"
+      className="py-20 bg-cover bg-center relative bg-fixed mb-24"
     >
       <div className="absolute inset-0 bg-black/40"></div>
       {/* Content container */}

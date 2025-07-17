@@ -8,6 +8,7 @@ import Gallery from '../components/Gallery';
 import OurFeature from '../components/OurFeature';
 import OurTeam from '../components/OurTeam';
 import CountBar from '../components/CountBar';
+import Contact from '../components/Contact';
 
 const Home = () => {
     return (
@@ -21,6 +22,7 @@ const Home = () => {
             <OurFeature></OurFeature>
             <OurTeam></OurTeam>
             <CountBar></CountBar>
+            <Contact></Contact>
         </div>
     );
 };

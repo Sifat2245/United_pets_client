@@ -4,6 +4,7 @@ import TopBar from '../components/TopBar';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import { FaArrowUp } from 'react-icons/fa';
+import Newsletter from '../components/Newsletter';
 
 const MainLayout = () => {
     const [showButton, setShowButton] = useState(false)
@@ -26,6 +27,7 @@ const MainLayout = () => {
             <TopBar></TopBar>
             <Navbar></Navbar>
             <Outlet></Outlet>
+            <Newsletter></Newsletter>
             <Footer></Footer>
 
 
