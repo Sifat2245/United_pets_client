@@ -14,7 +14,7 @@ const PetCard = ({ pet }) => {
   return (
     <div className="bg-neutral-100 shadow-md hover:shadow-xl transition duration-300 overflow-hidden max-w-sm mx-auto">
       {/* Image */}
-      <div className="h-80 w-full overflow-hidden">
+      <div className="h-80 w-full aspect-square overflow-hidden">
         <img
           src={image}
           alt={name}

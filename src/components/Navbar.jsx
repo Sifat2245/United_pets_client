@@ -11,15 +11,14 @@ import { useModal } from "../context/ModalProvider";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { user, logOut } = use(AuthContext);
-const {
-  isLoginModalOpen,
-  isSignupModalOpen,
-  openLoginModal,
-  openSignupModal,
-  closeLoginModal,
-  closeSignupModal,
-} = useModal();
-
+  const {
+    isLoginModalOpen,
+    isSignupModalOpen,
+    openLoginModal,
+    openSignupModal,
+    closeLoginModal,
+    closeSignupModal,
+  } = useModal();
 
   const [showSticky, setShowSticky] = useState(false);
 
@@ -63,6 +62,16 @@ const {
         Adopt
       </NavLink>
       <NavLink
+        to={"/gallery"}
+        className={({ isActive }) =>
+          `hover:text-[#D61C62] transition-all duration-300 ${
+            isActive ? "text-[#D61C62]" : ""
+          }`
+        }
+      >
+        Donate
+      </NavLink>
+      <NavLink
         to={"/services"}
         className={({ isActive }) =>
           `hover:text-[#D61C62] transition-all duration-300 ${
@@ -81,16 +90,6 @@ const {
         }
       >
         About
-      </NavLink>
-      <NavLink
-        to={"/gallery"}
-        className={({ isActive }) =>
-          `hover:text-[#D61C62] transition-all duration-300 ${
-            isActive ? "text-[#D61C62]" : ""
-          }`
-        }
-      >
-        Gallery
       </NavLink>
       <NavLink
         to={"/contact"}
