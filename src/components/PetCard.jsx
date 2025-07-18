@@ -1,15 +1,9 @@
 import React from "react";
 import { FaMapMarkerAlt, FaMars, FaVenus } from "react-icons/fa";
+import { Link } from "react-router";
 
 const PetCard = ({ pet }) => {
-  const {
-    image,
-    name,
-    age,
-    gender,
-    breed,
-    location,
-  } = pet;
+  const { _id ,image, name, age, gender, breed, location } = pet;
 
   return (
     <div className="bg-neutral-100 shadow-md hover:shadow-xl transition duration-300 overflow-hidden max-w-sm mx-auto">
@@ -27,7 +21,9 @@ const PetCard = ({ pet }) => {
         <h3 className="text-xl font-bold text-[#1446A0]">{name}</h3>
 
         <div className="flex justify-between text-sm">
-          <span>Age: <span className="font-semibold">{age}</span></span>
+          <span>
+            Age: <span className="font-semibold">{age}</span>
+          </span>
           <span className="flex items-center gap-1">
             Gender:{" "}
             <span className="font-semibold flex items-center gap-1 text-[#D61C62]">
@@ -46,9 +42,11 @@ const PetCard = ({ pet }) => {
           <span>{location}</span>
         </div>
 
-        <button className="mt-3 bg-[#D61C62] text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#b91752] transition duration-300">
-          More Info
-        </button>
+        <Link to={`/pet-details/${_id}`}>
+          <button className="mt-3 bg-[#D61C62] text-white px-4 py-2 rounded-full text-sm font-semibold hover:bg-[#b91752] transition duration-300">
+            More Info
+          </button>
+        </Link>
       </div>
     </div>
   );

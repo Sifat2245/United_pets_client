@@ -7,6 +7,7 @@ import testimonialsImage from "../assets/aboutImages/testimonial.jpg";
 
 import { FaPaw, FaQuoteLeft } from "react-icons/fa";
 import { useState } from "react";
+import { Link } from "react-router";
 
 // Define the content for each tab
 const tabs = [
@@ -74,7 +75,6 @@ const tabs = [
     ],
   },
 ];
-
 
 const AboutUs = () => {
   const [activeTab, setActiveTab] = useState(tabs[0].id);
@@ -170,9 +170,11 @@ const AboutUs = () => {
                     </div>
                   ))}
                 </div>
-                <button className="mt-8 bg-[#018AE0] text-white px-8 py-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300 focus:outline-none">
-                  MORE ABOUT US
-                </button>
+                <Link to={'/about'}>
+                  <button className="mt-8 bg-[#018AE0] text-white px-8 py-2 rounded-full shadow-lg hover:bg-blue-600 transition-colors duration-300 focus:outline-none">
+                    MORE ABOUT US
+                  </button>
+                </Link>
               </div>
             </motion.div>
           </AnimatePresence>

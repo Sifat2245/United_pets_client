@@ -15,6 +15,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import PageTitle from "../hooks/PageTitle.";
 
 // Custom SVG Icons to match the design
 const TrainingIcon = () => (
@@ -128,6 +129,7 @@ const Services = () => {
 
   return (
     <div>
+      <PageTitle title={'Services - United Pets'}></PageTitle>
       <PageHeading
         title={"Services"}
         breadcrumb={[

@@ -1,9 +1,11 @@
 import React from 'react';
 import PageHeading from '../components/reuseable/pageHeadinng';
+import PageTitle from '../hooks/PageTitle.';
 
 const Donate = () => {
     return (
         <div>
+            <PageTitle title={'Donate - United Pets'}></PageTitle>
            <PageHeading
            title={'Donate'}
            breadcrumb={[

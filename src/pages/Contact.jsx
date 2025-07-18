@@ -9,10 +9,12 @@ import {
   FaInstagram,
   FaPinterest,
 } from "react-icons/fa";
+import PageTitle from "../hooks/PageTitle.";
 
 const Contact = () => {
   return (
     <div>
+      <PageTitle title={'Contact - United Pets'}></PageTitle>
       <PageHeading
         title={"Contact Us"}
         breadcrumb={[

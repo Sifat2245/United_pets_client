@@ -19,6 +19,7 @@ import AllDonations from "../pages/Dashboard/AllDonations";
 import MyProfile from "../pages/Dashboard/MyProfile";
 import PrivateRoute from "../routes/PrivateRoute";
 import Donate from "../pages/Donate";
+import PetDetails from "../pages/PetDetails";
 
 export const router = createBrowserRouter([
     {
@@ -32,6 +33,11 @@ export const router = createBrowserRouter([
             {
                 path:'/adopt',
                 Component: Adopt
+            },
+            {
+                path:'/pet-details/:id',
+                Component: PetDetails,
+                loader: ({params}) => fetch(`http://localhost:3000/pets/${params.id}`)
             },
             {
                 path:'/donate',

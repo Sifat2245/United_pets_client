@@ -9,10 +9,12 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import PageTitle from "../hooks/PageTitle.";
 
 const About = () => {
   return (
     <div>
+      <PageTitle title={'About - United Pets'}></PageTitle>
       <PageHeading
         title={"About Us"}
         breadcrumb={[

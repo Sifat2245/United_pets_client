@@ -4,6 +4,7 @@ import { FaCheckSquare } from "react-icons/fa";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import PetCard from "../components/PetCard";
+import PageTitle from "../hooks/PageTitle.";
 
 const adoptionFeatures = [
   "All pets are neutered and vaccinated.",
@@ -29,6 +30,7 @@ const Adopt = () => {
 
   return (
     <div>
+      <PageTitle title={'Adopt - United Pets'}></PageTitle>
       <PageHeading
         title="Adoption"
         breadcrumb={[
