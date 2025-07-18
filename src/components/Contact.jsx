@@ -3,10 +3,11 @@ import { FaEnvelope, FaMapMarkerAlt, FaPaw, FaPhoneAlt } from "react-icons/fa";
 import contactCat from "../assets/contactbg1.png";
 import { MessageCircleMore } from "lucide-react";
 
+
 const Contact = () => {
   return (
-    <div className="mb-24">
-      <div className="text-center mb-12">
+    <div className="mb-24" id="contact">
+      <div className="text-center mb-24">
         <p className="text-sm text-gray-500 uppercase tracking-widest mb-2">
           — GET IN TOUCH —
         </p>
@@ -21,7 +22,9 @@ const Contact = () => {
           <img src={contactCat} alt="Cat peeking" className="h-[870px]" />
         </div>
 
-        <div className="w-full max-w-lg bg-[#018AE0] text-white py-8 px-4 rounded-lg relative z-10">
+        <div
+          className="w-full max-w-lg bg-[#018AE0] text-white py-8 px-4 rounded-lg relative z-10"
+        >
           <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#018AE0] p-6 rounded-full">
             <FaEnvelope className="text-3xl text-white" />
           </div>

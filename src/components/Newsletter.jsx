@@ -7,6 +7,7 @@ const Newsletter = () => {
       className="relative bg-cover bg-center bg-no-repeat"
       style={{
         backgroundImage: `url(${newsLetterImg})`,
+        backgroundPosition: 'bottom'
       }}
     >
       <div className="absolute inset-0 bg-black/30 z-0" />

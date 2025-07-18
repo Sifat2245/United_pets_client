@@ -62,7 +62,7 @@ const Navbar = () => {
         Adopt
       </NavLink>
       <NavLink
-        to={"/gallery"}
+        to={"/donate"}
         className={({ isActive }) =>
           `hover:text-[#D61C62] transition-all duration-300 ${
             isActive ? "text-[#D61C62]" : ""
@@ -119,7 +119,7 @@ const Navbar = () => {
   );
   return (
     <>
-      <nav className="bg-white shadow-md py-4 px-4 sm:px-6 lg:px-8">
+      <nav className="bg-neutral-100 shadow-md py-4 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex-shrink-0">
             <a
@@ -241,7 +241,7 @@ const Navbar = () => {
         initial="hidden"
         animate={showSticky ? "visible" : "hidden"}
         transition={{ duration: 0.2, ease: "easeInOut" }}
-        className="fixed top-0 w-full z-50 bg-white shadow-md py-4 px-4 sm:px-6 lg:px-8"
+        className="fixed top-0 w-full z-50 bg-neutral-100 shadow-md py-4 px-4 sm:px-6 lg:px-8"
       >
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex-shrink-0">

@@ -3,7 +3,6 @@ import MainLayout from "../layouts/MainLayout";
 import Adopt from "../pages/Adopt";
 import Services from "../pages/Services";
 import About from "../pages/About";
-import Gallery from "../pages/Gallery";
 import Contact from "../pages/Contact";
 import Home from "../pages/Home";
 import DashboardLayout from "../layouts/Dashboard.Layout";
@@ -19,6 +18,7 @@ import AllPets from "../pages/Dashboard/AllPets";
 import AllDonations from "../pages/Dashboard/AllDonations";
 import MyProfile from "../pages/Dashboard/MyProfile";
 import PrivateRoute from "../routes/PrivateRoute";
+import Donate from "../pages/Donate";
 
 export const router = createBrowserRouter([
     {
@@ -34,6 +34,10 @@ export const router = createBrowserRouter([
                 Component: Adopt
             },
             {
+                path:'/donate',
+                Component: Donate
+            },
+            {
                 path:'/services',
                 Component: Services
             },
@@ -41,10 +45,6 @@ export const router = createBrowserRouter([
                 path:'/about',
                 Component: About
             }, 
-            {  
-                path:'/gallery',
-                Component: Gallery
-            },
             {
                 path: '/contact',
                 Component: Contact

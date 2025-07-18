@@ -4,6 +4,12 @@ import heroImg from "../assets/slide1-element.png";
 import { motion } from "framer-motion"; // eslint-disable-line
 
 const Hero = () => {
+  const handleClick = () =>{
+    const contactSection = document.getElementById("contact");
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: "smooth" });
+    }
+  }
   return (
     <div
       style={{
@@ -42,6 +48,7 @@ const Hero = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.9 }}
+          onClick={handleClick}
           className="bg-[#018AE0] px-8 py-2 md:px-12 md:py-3 rounded-4xl font-semibold hover:bg-[#0174e0] cursor-pointer"
         >
           CONTACT US
