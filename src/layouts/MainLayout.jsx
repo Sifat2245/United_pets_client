@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Outlet } from 'react-router';
+import { Outlet, ScrollRestoration } from 'react-router';
 import TopBar from '../components/TopBar';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
@@ -24,6 +24,7 @@ const MainLayout = () => {
 
     return (
         <div>
+            <ScrollRestoration></ScrollRestoration>
             <TopBar></TopBar>
             <Navbar></Navbar>
             <Outlet></Outlet>

@@ -6,6 +6,8 @@ import { Pencil, Trash2, Heart } from "lucide-react";
 import toast from "react-hot-toast";
 import Swal from "sweetalert2";
 import PetUpdateModal from "./PetUpdateModal";
+import loader from "../../../public/loader.json";
+import Lottie from "lottie-react";
 
 const MyAddedPets = () => {
   const { user } = useContext(AuthContext);
@@ -62,6 +64,30 @@ const MyAddedPets = () => {
     }
   };
 
+  const handleAdoptionStatus = async(id) =>{
+    const result = await Swal.fire({
+      title: "Your pet is adopted?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#3085d6",
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (!result.isConfirmed) return;
+
+    const updatingToast = toast.loading("Updating ...");
+
+    try {
+      await axiosSecure.patch(`/pets/${id}`);
+      toast.success("Status updated successfully!", { id: updatingToast });
+      refetch();
+    } catch (err) {
+      toast.error("Failed to update.", { id: updatingToast });
+      console.error("error:", err.message);
+    }
+  }
+
   const openEditModal = (pet) => {
     setEditingPet(pet);
     setIsModalOpen(true);
@@ -73,7 +99,13 @@ const MyAddedPets = () => {
   };
 
   if (isLoading)
-    return <p className="text-center py-10">Loading your pets...</p>;
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="w-52">
+          <Lottie animationData={loader} loop={true}></Lottie>
+        </div>
+      </div>
+    );
   if (isError)
     return (
       <p className="text-center text-red-600 py-10">Error: {error.message}</p>
@@ -182,7 +214,7 @@ const MyAddedPets = () => {
                       <Trash2 size={14} />
                     </button>
                     {adoptionStatus !== "Adopted" && (
-                      <button className="inline-flex items-center gap-1 px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded">
+                      <button onClick={() => handleAdoptionStatus(_id)} className="inline-flex items-center gap-1 px-3 py-2 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded">
                         <Heart size={14} />
                       </button>
                     )}

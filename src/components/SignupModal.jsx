@@ -15,12 +15,12 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
     formState: { errors },
     reset,
   } = useForm();
-  const { createUser, updateUser } = useContext(AuthContext);
+  const { createUser, updateUser, loading } = useContext(AuthContext);
   const [profileImagePreview, SetProfileImagePreview] = useState(null);
   const [statusMessage, setStatusMessage] = useState("");
   const password = watch("password", "");
-  const [profileImage, setProfileImage] = useState('')
-  const axiosInstance = useAxios()
+  const [profileImage, setProfileImage] = useState("");
+  const axiosInstance = useAxios();
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
@@ -34,20 +34,25 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("upload_preset", "user_profile_image");
-    formData.append("cloud_name", `${import.meta.env.VITE_Cloudinary_cloudname}`);
+    formData.append(
+      "cloud_name",
+      `${import.meta.env.VITE_Cloudinary_cloudname}`
+    );
 
     const res = await axios.post(
-      `https://api.cloudinary.com/v1_1/${import.meta.env.VITE_Cloudinary_cloudname}/image/upload`,
+      `https://api.cloudinary.com/v1_1/${
+        import.meta.env.VITE_Cloudinary_cloudname
+      }/image/upload`,
       formData
     );
     console.log(res.data);
-    setProfileImage(res.data.url)
+    setProfileImage(res.data.url);
   };
 
   const onSubmit = (data) => {
     setStatusMessage("");
     createUser(data.email, data.password)
-      .then(async(result) => {
+      .then(async (result) => {
         console.log("account created", result.user);
         //update user
         const userProfile = {
@@ -67,17 +72,16 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
             console.log(error.message);
           });
 
+        const userInfo = {
+          email: data.email,
+          name: data.name,
+          photoURL: profileImage,
+          role: "user",
+          created_at: new Date().toISOString(),
+        };
 
-          const userInfo = {
-            email: data.email,
-            name: data.name,
-            photoURL: profileImage,
-            role: 'user',
-            created_at: new Date().toISOString()
-          }
-
-          const userRes = await axiosInstance.post('/users', userInfo)
-          console.log('user stored',userRes.data);
+        const userRes = await axiosInstance.post("/users", userInfo);
+        console.log("user stored", userRes.data);
       })
       .catch((error) => {
         console.log("error found", error);
@@ -274,9 +278,40 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#D61C62] hover:bg-pink-700 text-white font-semibold py-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#D61C62] focus:ring-opacity-50"
+                  disabled={loading}
+                  className={`w-full flex items-center justify-center gap-2 bg-[#D61C62] ${
+                    loading
+                      ? "bg-opacity-50 cursor-not-allowed"
+                      : "hover:bg-pink-700"
+                  } text-white font-semibold py-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#D61C62] focus:ring-opacity-50`}
                 >
-                  SIGN UP
+                  {loading ? (
+                    <>
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        ></path>
+                      </svg>
+                      Signin In...
+                    </>
+                  ) : (
+                    "SIGN UP"
+                  )}
                 </button>
               </form>
 

@@ -5,6 +5,8 @@ import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import PetCard from "../components/PetCard";
 import PageTitle from "../hooks/PageTitle.";
+import Lottie from "lottie-react";
+import loader from '../../public/loader.json'
 
 const adoptionFeatures = [
   "All pets are neutered and vaccinated.",
@@ -13,24 +15,29 @@ const adoptionFeatures = [
 ];
 
 const Adopt = () => {
+  const axiosSecure = useAxiosSecure();
 
-    const axiosSecure = useAxiosSecure()
+  const { data: pets = [], isLoading } = useQuery({
+    queryKey: ["pets"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/pets/not-adopted");
+      return res.data;
+    },
+  });
 
-    const {data: pets = [], isLoading} = useQuery({
-        queryKey: ['pets'],
-        queryFn: async() =>{
-            const res = await axiosSecure.get('/pets/not-adopted')
-            return res.data
-        }
-    })
-
-    if(isLoading){
-        return <span>Loading..</span>
-    }
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="w-52">
+          <Lottie animationData={loader} loop={true}></Lottie>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
-      <PageTitle title={'Adopt - United Pets'}></PageTitle>
+      <PageTitle title={"Adopt - United Pets"}></PageTitle>
       <PageHeading
         title="Adoption"
         breadcrumb={[
@@ -79,9 +86,9 @@ const Adopt = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 my-24 w-4/5 mx-auto">
-        {
-            pets.map(pet => <PetCard key={pet._id} pet={pet}></PetCard>)
-        }
+        {pets.map((pet) => (
+          <PetCard key={pet._id} pet={pet}></PetCard>
+        ))}
       </div>
     </div>
   );

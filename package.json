@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.4",
     "@radix-ui/react-accordion": "^1.2.11",
     "@radix-ui/react-slot": "^1.2.3",
     "@tailwindcss/vite": "^4.1.11",
@@ -28,6 +29,7 @@
     "clsx": "^2.1.1",
     "firebase": "^11.10.0",
     "framer-motion": "^12.23.0",
+    "lottie-react": "^2.4.1",
     "lucide-react": "^0.525.0",
     "react": "^19.1.0",
     "react-countup": "^6.5.3",

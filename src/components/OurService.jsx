@@ -9,6 +9,7 @@ import adoptionImage from "../assets/service card/service3.jpg";
 import dogWalkerImage from "../assets/service card/service4.jpg";
 import dogImage from "../assets/service card/service5.jpg";
 import Slider from "react-slick";
+import { Link } from "react-router";
 
 const NextArrow = (props) => {
   const { className, style, onClick } = props;
@@ -138,9 +139,11 @@ const OurService = () => {
               specialized treatments, we ensure your furry friends receive the
               highest standard of care in a comfortable and loving environment.
             </p>
-            <button className="bg-[#018AE0] text-white px-8 py-3 rounded-md shadow-lg hover:bg-[#018ae0e0] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
-              CONTACT US
-            </button>
+            <Link to={"/contact"}>
+              <button className="bg-[#018AE0] text-white px-8 py-3 rounded-md shadow-lg hover:bg-[#018ae0e0] transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50">
+                CONTACT US
+              </button>
+            </Link>
           </div>
 
           {/* Right Column: Image */}
@@ -181,9 +184,11 @@ const OurService = () => {
                     <FaPaw className="absolute text-white/10 text-5xl -top-2 -left-3 transform rotate-12" />
                     <FaPaw className="absolute text-white/10 text-6xl -bottom-4 -right-4 transform -rotate-12" />
 
-                    <button className="bg-[#D61C62] text-white font-semibold text-sm sm:text-base py-2 px-6 sm:px-8 rounded-full hover:bg-[#018AE0] transition-all duration-300">
-                      READ MORE
-                    </button>
+                    <Link to={'/services'}>
+                      <button className="bg-[#D61C62] text-white font-semibold text-sm sm:text-base py-2 px-6 sm:px-8 rounded-full hover:bg-[#018AE0] transition-all duration-300">
+                        READ MORE
+                      </button>
+                    </Link>
                   </div>
                 </div>
               </div>

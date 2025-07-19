@@ -8,6 +8,8 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Slider from "react-slick";
 import { Link } from "react-router";
+import loader from '../../public/loader.json'
+import Lottie from "lottie-react";
 
 const Adoption = () => {
   const axiosSecure = useAxiosSecure();
@@ -64,7 +66,13 @@ const Adoption = () => {
   };
 
   if (isLoading) {
-    return <span>loading....</span>;
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="w-52">
+          <Lottie animationData={loader} loop={true}></Lottie>
+        </div>
+      </div>
+    );
   }
   return (
     <div

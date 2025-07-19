@@ -1,5 +1,5 @@
-import React from "react";
-import { useLoaderData } from "react-router";
+import React, { use, useEffect, useState } from "react";
+import { Link, useLoaderData } from "react-router";
 import PageHeading from "../components/reuseable/pageHeadinng";
 import {
   Accordion,
@@ -11,25 +11,69 @@ import bgImg from "../assets/pattern1.png";
 import { CalendarDays, MapPin } from "lucide-react";
 import dogImg from "../assets/adoptionsidebar1.jpg";
 import PageTitle from "../hooks/PageTitle.";
+import useAxios from "../hooks/useAxios";
+import Lottie from "lottie-react";
+import loader from "../../public/loader.json";
+import AdoptModal from "../components/AdoptModal";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import toast from "react-hot-toast";
 
 const PetDetails = () => {
+  const pet = useLoaderData();
+  const axiosInstance = useAxios();
+  const axiosSecure = useAxiosSecure();
+
   const {
     _id,
     image,
     name,
     age,
     breed,
-    location,
     category,
     gender,
     vaccinated,
     shortDescription,
     longDescription,
-  } = useLoaderData();
+  } = pet;
+
+  const [relatedPets, setRelatedPets] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  useEffect(() => {
+    setLoading(true);
+    axiosInstance
+      .get(`/pets/category/${pet.category}?exclude=${pet._id}`)
+      .then((res) => {
+        setRelatedPets(res.data);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [category, _id]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="w-52">
+          <Lottie animationData={loader} loop={true}></Lottie>
+        </div>
+      </div>
+    );
+  }
+
+  const handleAdoptionSubmit = async (data) => {
+    await axiosSecure.post("/adoptionRequest", data)
+    .then(res => {
+      if(res.data.insertedId){
+        toast.success('Adoption Request Sent Successfully') 
+      }
+    })
+  };
 
   return (
     <div>
-        <PageTitle title={`${name} - United Pets`}></PageTitle>
+      <PageTitle title={`${name} - United Pets`}></PageTitle>
       <PageHeading
         title={"Pet Details"}
         breadcrumb={[
@@ -86,11 +130,21 @@ const PetDetails = () => {
             </p>
           </div>
 
-          <div className="mb-16">
-            <button className="px-12 py-2 rounded-full bg-[#D61C62] hover:bg-[#018AE0] transition-all duration-300 cursor-pointer text-white font-bold">
+          <div className="mb-24">
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="px-12 py-2 rounded-full bg-[#D61C62] hover:bg-[#018AE0] transition-all duration-300 cursor-pointer text-white font-bold"
+            >
               Adopt Me
             </button>
           </div>
+
+          <AdoptModal
+            isOpen={isModalOpen}
+            onClose={() => setIsModalOpen(false)}
+            pet={pet}
+            onSubmitAdoption={handleAdoptionSubmit}
+          ></AdoptModal>
 
           <div className="mb-14">
             <h1 className="text-2xl font-bold mb-4">
@@ -211,38 +265,31 @@ const PetDetails = () => {
             </div>
 
             {/* Adopt a Pet */}
-            <div className="px-5 py-6">
+            <div className="px-5 py-6 text-center">
               <h3 className="text-lg font-bold mb-4">Adopt a pet</h3>
-              {/* <ul className="space-y-3">
-              <li className="flex items-center gap-3 bg-white p-2 rounded-lg shadow-sm">
-                <img
-                  src={cat1}
-                  alt="Leelo"
-                  className="w-10 h-10 object-cover rounded-md"
-                />
-                <span className="font-semibold text-[#D61C62]">Leelo</span>
-              </li>
-              <li className="flex items-center gap-3 bg-white p-2 rounded-lg shadow-sm">
-                <img
-                  src={cat2}
-                  alt="Jonsi"
-                  className="w-10 h-10 object-cover rounded-md"
-                />
-                <span className="font-semibold text-[#018AE0]">Jonsi</span>
-              </li>
-              <li className="flex items-center gap-3 bg-white p-2 rounded-lg shadow-sm">
-                <img
-                  src={dog2}
-                  alt="Milena"
-                  className="w-10 h-10 object-cover rounded-md"
-                />
-                <span className="font-semibold text-[#1446A0]">Milena</span>
-              </li>
-            </ul> */}
+              <ul className="space-y-3">
+                {relatedPets.map((pet) => (
+                  <li key={pet._id}>
+                    <Link to={`/pet-details/${pet._id}`}>
+                      <div className="flex items-center gap-3 bg-white p-2 rounded-lg shadow-sm">
+                        <img
+                          src={pet.image}
+                          className="w-10 h-10 object-cover rounded-md"
+                        />
+                        <span className="font-semibold text-[#D61C62]">
+                          {pet.name}
+                        </span>
+                      </div>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
               <div className="text-center mt-5">
-                <button className="bg-[#018AE0] text-white text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-[#1446A0] transition">
-                  SEE ALL
-                </button>
+                <Link to={"/adopt"}>
+                  <button className="bg-[#018AE0] text-white text-sm font-semibold px-4 py-1.5 rounded-full hover:bg-[#1446A0] transition">
+                    SEE ALL
+                  </button>
+                </Link>
               </div>
             </div>
 

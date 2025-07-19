@@ -12,20 +12,20 @@ const LoginModal = ({ isOpen, onClose, onOpenSignup }) => {
     formState: { errors },
     reset,
   } = useForm();
-  const {loginUser} = use(AuthContext)
+  const { loginUser, loading } = use(AuthContext);
   const [statusMessage, setStatusMessage] = useState("");
 
   const onSubmit = (data) => {
     loginUser(data.email, data.password)
-    .then(result=>{
-      console.log('login successful', result.user);
-      reset();
-      setStatusMessage("");
-      onClose();
-    })
-    .catch(error =>{
-      console.log('there are some error', error);
-    })
+      .then((result) => {
+        console.log("login successful", result.user);
+        reset();
+        setStatusMessage("");
+        onClose();
+      })
+      .catch((error) => {
+        console.log("there are some error", error);
+      });
   };
 
   const handleSignupClick = (e) => {
@@ -54,7 +54,7 @@ const LoginModal = ({ isOpen, onClose, onOpenSignup }) => {
             onClick={(e) => e.stopPropagation()}
           >
             <button
-              onClick={()=> onClose()}
+              onClick={() => onClose()}
               className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 p-1 rounded-full focus:outline-none focus:ring-2 focus:ring-[#018AE0]"
               aria-label="Close modal"
             >
@@ -136,13 +136,44 @@ const LoginModal = ({ isOpen, onClose, onOpenSignup }) => {
 
                 <button
                   type="submit"
-                  className="w-full bg-[#D61C62] hover:bg-pink-700 text-white font-semibold py-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#D61C62] focus:ring-opacity-50"
+                  className={`w-full flex items-center justify-center gap-2 bg-[#D61C62] ${
+                    loading
+                      ? "bg-opacity-50 cursor-not-allowed"
+                      : "hover:bg-pink-700"
+                  } text-white font-semibold py-3 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-4 focus:ring-[#D61C62] focus:ring-opacity-50`}
+                  disabled={loading}
                 >
-                  LOGIN
+                  {loading ? (
+                    <>
+                      <svg
+                        className="animate-spin h-5 w-5 text-white"
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                      >
+                        <circle
+                          className="opacity-25"
+                          cx="12"
+                          cy="12"
+                          r="10"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                        ></circle>
+                        <path
+                          className="opacity-75"
+                          fill="currentColor"
+                          d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+                        ></path>
+                      </svg>
+                      Logging in...
+                    </>
+                  ) : (
+                    "LOGIN"
+                  )}
                 </button>
               </form>
 
-               <div className="relative my-6">
+              <div className="relative my-6">
                 <div className="absolute inset-0 flex items-center">
                   <div className="w-full border-t border-gray-300"></div>
                 </div>
@@ -154,7 +185,7 @@ const LoginModal = ({ isOpen, onClose, onOpenSignup }) => {
               </div>
 
               <div className="space-y-3">
-               <SocialLogin onClose={onClose}></SocialLogin>
+                <SocialLogin onClose={onClose}></SocialLogin>
               </div>
 
               <p className="mt-6 text-center text-gray-600 text-sm">
