@@ -10,7 +10,6 @@ import Overview from "../pages/Dashboard/Overview";
 import AddPet from "../pages/Dashboard/AddPet";
 import MyAddedPets from "../pages/Dashboard/MyAddedPets";
 import AdoptionRequest from "../pages/Dashboard/AdoptionRequest";
-import CreateCampagin from "../pages/Dashboard/CreateCampagin";
 import MyCampaigns from "../pages/Dashboard/MyCampaigns";
 import MyDonations from "../pages/Dashboard/MyDonations";
 import Users from "../pages/Dashboard/Users";
@@ -20,6 +19,7 @@ import MyProfile from "../pages/Dashboard/MyProfile";
 import PrivateRoute from "../routes/PrivateRoute";
 import Donate from "../pages/Donate";
 import PetDetails from "../pages/PetDetails";
+import CreateCampaign from "../pages/Dashboard/CreateCampagin";
 
 export const router = createBrowserRouter([
     {
@@ -81,7 +81,7 @@ export const router = createBrowserRouter([
             },
             {
                 path: 'create-campaign',
-                Component: CreateCampagin
+                Component: CreateCampaign
             },
             {
                 path: 'my-campaigns', 

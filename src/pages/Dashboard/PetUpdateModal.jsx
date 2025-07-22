@@ -14,6 +14,15 @@ import TextAlign from "@tiptap/extension-text-align";
 import Code from "@tiptap/extension-code";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
+import { motion, AnimatePresence } from "framer-motion";
+import { X } from "lucide-react";
+
+const backdropVariant = {
+  hidden: { opacity: 0 },
+  visible: { opacity: 1 },
+  exit: { opacity: 0 },
+};
+
 
 const categoryOptions = [
   { value: "Dog", label: "Dog" },
@@ -87,7 +96,7 @@ const PetUpdateModal = ({ isModalOpen, onModalClose, pet }) => {
     ],
     content: "",
     onUpdate: ({ editor }) => {
-      setValue("longDescription", editor.getHTML());
+      setValue("longDescription", editor.getText());
     },
   });
 
@@ -164,309 +173,320 @@ const PetUpdateModal = ({ isModalOpen, onModalClose, pet }) => {
   if (!isModalOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-center items-center overflow-auto bg-black/50 p-4">
-      <div className="bg-white max-w-4xl w-full rounded-lg shadow-lg relative p-6 max-h-[90vh] overflow-y-auto">
-        <button
-          onClick={onModalClose}
-          className="absolute top-2 right-2 text-gray-600 hover:text-black text-2xl"
-        >
-          X
-        </button>
+    <AnimatePresence>
+      <motion.div
+        variants={backdropVariant}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        aria-hidden="true"
+        className="fixed inset-0 z-50 flex justify-center items-center overflow-auto bg-black/50 p-4"
+      >
+        <div className="bg-white max-w-4xl w-full rounded-lg shadow-lg relative p-6 max-h-[90vh] overflow-y-auto">
+          <button
+            onClick={onModalClose}
+            className="absolute top-2 right-2 text-gray-600 hover:text-black text-2xl"
+          >
+            <X></X>
+          </button>
 
-        {/* Title */}
-        <h2 className="text-2xl font-semibold text-center mb-4">
-          Update Pet Information
-        </h2>
+          {/* Title */}
+          <h2 className="text-2xl font-semibold text-center mb-4">
+            Update Pet Information
+          </h2>
 
-        {/* Your Form Here */}
-        <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          <div>
-            <label className="block font-semibold mb-1 text-gray-700">
-              Pet Image
-            </label>
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageUpload}
-              className="block w-full text-sm border rounded px-3 py-2"
-            />
-            {imageUrl && (
-              <img
-                src={imageUrl}
-                alt="Pet"
-                className="mt-2 w-40 h-40 object-cover rounded border"
-              />
-            )}
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          {/* Your Form Here */}
+          <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
             <div>
               <label className="block font-semibold mb-1 text-gray-700">
-                Pet Name
+                Pet Image
               </label>
               <input
-                type="text"
-                {...register("name", { required: "Name is required" })}
-                className="w-full border px-3 py-2 rounded"
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                className="block w-full text-sm border rounded px-3 py-2"
               />
-              {errors.name && (
-                <p className="text-red-500">{errors.name.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block font-semibold mb-1 text-gray-700">
-                Pet Age
-              </label>
-              <input
-                type="text"
-                {...register("age", { required: "Age is required" })}
-                className="w-full border px-3 py-2 rounded"
-              />
-              {errors.age && (
-                <p className="text-red-500">{errors.age.message}</p>
-              )}
-            </div>
-
-            <div>
-              <label className="block font-semibold mb-1 text-gray-700">
-                Gender
-              </label>
-              <Select
-                options={genderOptions}
-                value={selectedGender}
-                onChange={(option) => setSelectedGender(option)}
-                placeholder="Select gender"
-                className="text-sm"
-              />
-            </div>
-
-            <div>
-              <label className="block font-semibold mb-1 text-gray-700">
-                Pet Category
-              </label>
-              <Select
-                options={categoryOptions}
-                value={selectedCategory}
-                onChange={(option) => {
-                  setSelectedCategory(option);
-                  setCustomCategory("");
-                }}
-                placeholder="Select category"
-                className="text-sm"
-              />
-              {selectedCategory?.value === "Other" && (
-                <input
-                  type="text"
-                  value={customCategory}
-                  onChange={(e) => setCustomCategory(e.target.value)}
-                  placeholder="Enter custom category"
-                  className="mt-2 w-full border px-3 py-2 rounded"
+              {imageUrl && (
+                <img
+                  src={imageUrl}
+                  alt="Pet"
+                  className="mt-2 w-40 h-40 object-cover rounded border"
                 />
               )}
             </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block font-semibold mb-1 text-gray-700">
+                  Pet Name
+                </label>
+                <input
+                  type="text"
+                  {...register("name", { required: "Name is required" })}
+                  className="w-full border px-3 py-2 rounded"
+                />
+                {errors.name && (
+                  <p className="text-red-500">{errors.name.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block font-semibold mb-1 text-gray-700">
+                  Pet Age
+                </label>
+                <input
+                  type="text"
+                  {...register("age", { required: "Age is required" })}
+                  className="w-full border px-3 py-2 rounded"
+                />
+                {errors.age && (
+                  <p className="text-red-500">{errors.age.message}</p>
+                )}
+              </div>
+
+              <div>
+                <label className="block font-semibold mb-1 text-gray-700">
+                  Gender
+                </label>
+                <Select
+                  options={genderOptions}
+                  value={selectedGender}
+                  onChange={(option) => setSelectedGender(option)}
+                  placeholder="Select gender"
+                  className="text-sm"
+                />
+              </div>
+
+              <div>
+                <label className="block font-semibold mb-1 text-gray-700">
+                  Pet Category
+                </label>
+                <Select
+                  options={categoryOptions}
+                  value={selectedCategory}
+                  onChange={(option) => {
+                    setSelectedCategory(option);
+                    setCustomCategory("");
+                  }}
+                  placeholder="Select category"
+                  className="text-sm"
+                />
+                {selectedCategory?.value === "Other" && (
+                  <input
+                    type="text"
+                    value={customCategory}
+                    onChange={(e) => setCustomCategory(e.target.value)}
+                    placeholder="Enter custom category"
+                    className="mt-2 w-full border px-3 py-2 rounded"
+                  />
+                )}
+              </div>
+              <div>
+                <label className="block font-semibold mb-1 text-gray-700">
+                  Pet Breed
+                </label>
+                <input
+                  type="text"
+                  {...register("breed", { required: "Breed is required" })}
+                  className="w-full border px-3 py-2 rounded"
+                  placeholder="Enter breed (e.g., Labrador, Persian, etc.)"
+                />
+                {errors.breed && (
+                  <p className="text-red-500 text-sm mt-1">
+                    {errors.breed.message}
+                  </p>
+                )}
+              </div>
+
+              <div>
+                <label className="block font-semibold mb-1 text-gray-700">
+                  Vaccinated
+                </label>
+                <Select
+                  options={vaccinationOptions}
+                  value={vaccinated}
+                  onChange={(option) => setVaccinated(option)}
+                  placeholder="Select vaccination status"
+                  className="text-sm"
+                />
+              </div>
+            </div>
+
             <div>
               <label className="block font-semibold mb-1 text-gray-700">
-                Pet Breed
+                Pet Location
               </label>
               <input
                 type="text"
-                {...register("breed", { required: "Breed is required" })}
+                {...register("location", { required: "Location is required" })}
                 className="w-full border px-3 py-2 rounded"
-                placeholder="Enter breed (e.g., Labrador, Persian, etc.)"
               />
-              {errors.breed && (
-                <p className="text-red-500 text-sm mt-1">
-                  {errors.breed.message}
-                </p>
+              {errors.location && (
+                <p className="text-red-500">{errors.location.message}</p>
               )}
             </div>
 
             <div>
               <label className="block font-semibold mb-1 text-gray-700">
-                Vaccinated
+                Short Description
               </label>
-              <Select
-                options={vaccinationOptions}
-                value={vaccinated}
-                onChange={(option) => setVaccinated(option)}
-                placeholder="Select vaccination status"
-                className="text-sm"
+              <input
+                type="text"
+                {...register("shortDescription", { required: true })}
+                className="w-full border px-3 py-2 rounded"
               />
             </div>
-          </div>
 
-          <div>
-            <label className="block font-semibold mb-1 text-gray-700">
-              Pet Location
-            </label>
-            <input
-              type="text"
-              {...register("location", { required: "Location is required" })}
-              className="w-full border px-3 py-2 rounded"
-            />
-            {errors.location && (
-              <p className="text-red-500">{errors.location.message}</p>
-            )}
-          </div>
-
-          <div>
-            <label className="block font-semibold mb-1 text-gray-700">
-              Short Description
-            </label>
-            <input
-              type="text"
-              {...register("shortDescription", { required: true })}
-              className="w-full border px-3 py-2 rounded"
-            />
-          </div>
-
-          <div>
-            <label className="block font-semibold mb-1 text-gray-700">
-              Long Description
-            </label>
-            <div className="border rounded bg-white">
-              <div className="flex flex-wrap gap-1 p-2 border-b">
-                <button
-                  type="button"
-                  className={btn(editor?.isActive("bold"))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => editor.chain().focus().toggleBold().run()}
-                >
-                  <b>B</b>
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive("italic"))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => editor.chain().focus().toggleItalic().run()}
-                >
-                  <i>I</i>
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive("underline"))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => editor.chain().focus().toggleUnderline().run()}
-                >
-                  <u>U</u>
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive("code"))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() => editor.chain().focus().toggleCode().run()}
-                >
-                  {"<>"}
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive("heading", { level: 1 }))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() =>
-                    editor.chain().focus().toggleHeading({ level: 1 }).run()
-                  }
-                >
-                  H1
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive("heading", { level: 2 }))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() =>
-                    editor.chain().focus().toggleHeading({ level: 2 }).run()
-                  }
-                >
-                  H2
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive("bulletList"))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() =>
-                    editor.chain().focus().toggleBulletList().run()
-                  }
-                >
-                  • List
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive("orderedList"))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() =>
-                    editor.chain().focus().toggleOrderedList().run()
-                  }
-                >
-                  1. List
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive("blockquote"))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() =>
-                    editor.chain().focus().toggleBlockquote().run()
-                  }
-                >
-                  ❝
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive({ textAlign: "left" }))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() =>
-                    editor.chain().focus().setTextAlign("left").run()
-                  }
-                >
-                  🡸
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive({ textAlign: "center" }))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() =>
-                    editor.chain().focus().setTextAlign("center").run()
-                  }
-                >
-                  ⎯
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive({ textAlign: "right" }))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() =>
-                    editor.chain().focus().setTextAlign("right").run()
-                  }
-                >
-                  🡺
-                </button>
-                <button
-                  type="button"
-                  className={btn(editor?.isActive({ textAlign: "justify" }))}
-                  onMouseDown={(e) => e.preventDefault()}
-                  onClick={() =>
-                    editor.chain().focus().setTextAlign("justify").run()
-                  }
-                >
-                  ☰
-                </button>
+            <div>
+              <label className="block font-semibold mb-1 text-gray-700">
+                Long Description
+              </label>
+              <div className="border rounded bg-white">
+                <div className="flex flex-wrap gap-1 p-2 border-b">
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive("bold"))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => editor.chain().focus().toggleBold().run()}
+                  >
+                    <b>B</b>
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive("italic"))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => editor.chain().focus().toggleItalic().run()}
+                  >
+                    <i>I</i>
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive("underline"))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editor.chain().focus().toggleUnderline().run()
+                    }
+                  >
+                    <u>U</u>
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive("code"))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() => editor.chain().focus().toggleCode().run()}
+                  >
+                    {"<>"}
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive("heading", { level: 1 }))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editor.chain().focus().toggleHeading({ level: 1 }).run()
+                    }
+                  >
+                    H1
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive("heading", { level: 2 }))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editor.chain().focus().toggleHeading({ level: 2 }).run()
+                    }
+                  >
+                    H2
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive("bulletList"))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editor.chain().focus().toggleBulletList().run()
+                    }
+                  >
+                    • List
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive("orderedList"))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editor.chain().focus().toggleOrderedList().run()
+                    }
+                  >
+                    1. List
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive("blockquote"))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editor.chain().focus().toggleBlockquote().run()
+                    }
+                  >
+                    ❝
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive({ textAlign: "left" }))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editor.chain().focus().setTextAlign("left").run()
+                    }
+                  >
+                    🡸
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive({ textAlign: "center" }))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editor.chain().focus().setTextAlign("center").run()
+                    }
+                  >
+                    ⎯
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive({ textAlign: "right" }))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editor.chain().focus().setTextAlign("right").run()
+                    }
+                  >
+                    🡺
+                  </button>
+                  <button
+                    type="button"
+                    className={btn(editor?.isActive({ textAlign: "justify" }))}
+                    onMouseDown={(e) => e.preventDefault()}
+                    onClick={() =>
+                      editor.chain().focus().setTextAlign("justify").run()
+                    }
+                  >
+                    ☰
+                  </button>
+                </div>
+                <EditorContent
+                  editor={editor}
+                  className="p-3 min-h-[160px] focus:outline-none"
+                />
+                <input type="hidden" {...register("longDescription")} />
               </div>
-              <EditorContent
-                editor={editor}
-                className="p-3 min-h-[160px] focus:outline-none"
-              />
-              <input type="hidden" {...register("longDescription")} />
             </div>
-          </div>
 
-          <button
-            type="submit"
-            className="w-full hover:cursor-pointer md:w-auto bg-[#018AE0] text-white px-6 py-2 rounded hover:bg-blue-600 transition"
-          >
-            Update
-          </button>
-        </form>
-      </div>
-    </div>
+            <button
+              type="submit"
+              className="w-full hover:cursor-pointer md:w-auto bg-[#018AE0] text-white px-6 py-2 rounded hover:bg-blue-600 transition"
+            >
+              Update
+            </button>
+          </form>
+        </div>
+      </motion.div>
+    </AnimatePresence>
   );
 };
 
