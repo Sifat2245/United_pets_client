@@ -4,7 +4,7 @@ import { AuthContext } from "../context/AuthContext";
 import { Navigate, useNavigate } from "react-router";
 
 const axiosSecure = axios.create({
-  baseURL: `http://localhost:3000`,
+  baseURL: `http://localhost:3000/`,
 });
 
 const useAxiosSecure = () => {

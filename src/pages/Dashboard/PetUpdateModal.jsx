@@ -14,7 +14,7 @@ import TextAlign from "@tiptap/extension-text-align";
 import Code from "@tiptap/extension-code";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import Swal from "sweetalert2";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion"; //eslint-disable-line
 import { X } from "lucide-react";
 
 const backdropVariant = {

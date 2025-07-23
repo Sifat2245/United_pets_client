@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../../context/AuthContext";
-import { useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { Pause, Pencil, Play, Users2, X } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
@@ -17,10 +16,10 @@ const backdropVariant = {
 
 const MyCampaigns = () => {
   const { user } = useContext(AuthContext);
-  const navigate = useNavigate();
+//   const navigate = useNavigate();
   const [campaigns, setCampaigns] = useState([]);
-  const [selectedDonators, setSelectedDonators] = useState([]);
-  const [showModal, setShowModal] = useState(false);
+//   const [selectedDonators, setSelectedDonators] = useState([]);
+//   const [showModal, setShowModal] = useState(false);
   const axiosSecure = useAxiosSecure();
   const [showEditModal, setShowEditModal] = useState(false);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
@@ -62,15 +61,15 @@ const MyCampaigns = () => {
     }
   };
 
-  const handleViewDonators = async (id) => {
-    try {
-      const res = await axiosSecure.get(`/api/donations/by-campaign/${id}`);
-      setSelectedDonators(res.data || []);
-      setShowModal(true);
-    } catch (err) {
-      console.error("Failed to fetch donators", err);
-    }
-  };
+//   const handleViewDonators = async (id) => {
+//     try {
+//       const res = await axiosSecure.get(`/api/donations/by-campaign/${id}`);
+//       setSelectedDonators(res.data || []);
+//       setShowModal(true);
+//     } catch (err) {
+//       console.error("Failed to fetch donators", err);
+//     }
+//   };
 
 
   //edit
@@ -127,7 +126,7 @@ const MyCampaigns = () => {
                   key={c._id}
                   className="text-center border-b hover:bg-gray-50 transition"
                 >
-                  <td className="p-2 ">{c.shortDescription}</td>
+                  <td className="p-2 ">{c.petName}</td>
                   <td className="p-2 ">৳{c.maxDonation.toFixed(2)}</td>
                   <td className="p-2  w-64">
                     <div className="bg-gray-200 h-4 rounded-full">
@@ -143,7 +142,7 @@ const MyCampaigns = () => {
                   <td className="p-5  space-x-2 flex justify-center">
                     <button
                       onClick={() => handlePauseToggle(c._id, c.paused)}
-                      className={`p-2 rounded-full text-white ${
+                      className={`p-2 rounded-full text-white cursor-pointer ${
                         c.paused ? "bg-yellow-500" : "bg-[#D61C62]"
                       }`}
                       title={c.paused ? "Unpause" : "Pause"}
@@ -156,14 +155,14 @@ const MyCampaigns = () => {
                         setSelectedCampaign(c);
                         setShowEditModal(true);
                       }}
-                      className="p-2 bg-[#018AE0] rounded-full text-white"
+                      className="p-2 bg-[#018AE0] rounded-full text-white cursor-pointer"
                       title="Edit"
                     >
                       <Pencil size={18} />
                     </button>
                     <button
-                      onClick={() => handleViewDonators(c._id)}
-                      className="p-2 bg-[#0d9488] rounded-full text-white"
+                    //   onClick={() => handleViewDonators(c._id)}
+                      className="p-2 bg-[#0d9488] rounded-full text-white cursor-pointer"
                       title="View Donators"
                     >
                       <Users2 size={18} />

@@ -3,7 +3,7 @@ import React from 'react';
 
 const useAxios = () => {
     const axiosInstance = axios.create({
-        baseURL:'http://localhost:3000'
+        baseURL:'http://localhost:3000/'
     })
     return  axiosInstance;
 };
