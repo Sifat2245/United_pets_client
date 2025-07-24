@@ -12,7 +12,12 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Progress } from "@/components/ui/progress";
+import { useQuery } from "@tanstack/react-query";
+import Lottie from "lottie-react";
+import loader from "../../public/loader.json";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import DonationCard from "../components/DonationCard";
+import Payment from "./Payment/Payment";
 
 const DonationDetails = () => {
   const donationData = useLoaderData();
@@ -20,25 +25,43 @@ const DonationDetails = () => {
     _id,
     petName,
     petImage,
+    paused,
+    petCategory,
     maxDonation,
     shortDescription,
     longDescription,
     lastDate,
     totalDonated = 0,
   } = donationData;
+  const axiosSecure = useAxiosSecure();
 
-  const progress = Math.min((totalDonated / maxDonation) * 100, 100);
+  const progress = Math.min((totalDonated / maxDonation) * 100, 100).toFixed(2);
 
   const [amount, setAmount] = useState("");
-  const [cardInfo, setCardInfo] = useState({
-    number: "",
-    expiry: "",
-    cvc: "",
+
+  const {
+    data: recommended = [],
+    isLoading,
+  } = useQuery({
+    queryKey: ["category"],
+    queryFn: async () => {
+      const res = await axiosSecure.get(
+        `/donation/category/${petCategory}?excludeId=${_id}`
+      );
+      return res.data;
+    },
   });
 
-  const handleDonate = () => {
-    console.log({ amount, cardInfo, donationId: _id });
-  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex justify-center items-center">
+        <div className="w-52">
+          <Lottie animationData={loader} loop={true}></Lottie>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -78,19 +101,22 @@ const DonationDetails = () => {
               <span>Donation Progress</span>
               <span>{progress}%</span>
             </div>
-            <Progress
-              value={progress}
-              className="h-3 rounded mb-6 bg-gray-100"
-              indicatorClassName={
-                progress === 100 ? "bg-pink-600" : "bg-gray-100"
-              }
-            />
+            <div className="w-full bg-gray-200 h-3 rounded-full overflow-hidden mb-6">
+              <div
+                className="bg-[#D61C62] h-full transition-all duration-300"
+                style={{ width: `${progress}%` }}
+              ></div>
+            </div>
           </div>
 
           <Dialog>
             <DialogTrigger asChild>
-              <Button className="bg-pink-600 hover:bg-pink-700 text-white">
-                Donate Now
+              <Button
+                disabled={paused}
+                id="close-donation-modal"
+                className="bg-pink-600 hover:bg-pink-700 text-white"
+              >
+                {paused ? "Campaign Paused" : "Donate Now"}
               </Button>
             </DialogTrigger>
 
@@ -100,63 +126,37 @@ const DonationDetails = () => {
               </DialogHeader>
 
               <div className="space-y-6">
-                <div className="space-y-2">
-                  <Label>Amount (৳)</Label>
-                  <Input
-                    type="number"
-                    placeholder="Enter amount"
-                    value={amount}
-                    onChange={(e) => setAmount(e.target.value)}
+                <Label>Amount (৳)</Label>
+                <Input
+                  type="number"
+                  value={amount}
+                  onChange={(e) => setAmount(Number(e.target.value))}
+                  placeholder="Enter amount"
+                />
+
+                {amount > 0 && (
+                  <Payment
+                    amount={amount}
+                    donationId={_id}
+                    petName= {petName}
+                    petImage ={petImage}
+                    petCategory= {petCategory}
+                    onSuccess={() => {
+                      setAmount("");
+                      document.getElementById("close-donation-modal")?.click();
+                    }}
                   />
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Card Number</Label>
-                  <Input
-                    type="text"
-                    placeholder="XXXX XXXX XXXX XXXX"
-                    value={cardInfo.number}
-                    onChange={(e) =>
-                      setCardInfo({ ...cardInfo, number: e.target.value })
-                    }
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4 space-y-2">
-                  <div className="space-y-2">
-                    <Label>Expiry</Label>
-                    <Input
-                      type="text"
-                      placeholder="MM/YY"
-                      value={cardInfo.expiry}
-                      onChange={(e) =>
-                        setCardInfo({ ...cardInfo, expiry: e.target.value })
-                      }
-                    />
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label>CVC</Label>
-                    <Input
-                      type="text"
-                      placeholder="CVC"
-                      value={cardInfo.cvc}
-                      onChange={(e) =>
-                        setCardInfo({ ...cardInfo, cvc: e.target.value })
-                      }
-                    />
-                  </div>
-                </div>
-
-                <Button
-                  className="w-full bg-pink-600 hover:bg-pink-700 text-white mt-2"
-                  onClick={handleDonate}
-                >
-                  Confirm Donation
-                </Button>
+                )}
               </div>
             </DialogContent>
           </Dialog>
+
+          {paused && (
+            <p className="text-red-500 text-sm mt-4">
+              This campaign is currently paused. Donations are temporarily
+              disabled.
+            </p>
+          )}
         </div>
       </div>
       <div className="max-w-5xl mx-auto mt-16 space-y-10 px-4 text-gray-700 leading-relaxed mb-24">
@@ -247,6 +247,16 @@ const DonationDetails = () => {
             voiceless. Together, we’re building a more compassionate world — one
             pet at a time.
           </p>
+        </div>
+      </div>
+
+      <div className="w-4/5 mx-auto mb-24">
+        <h1 className="text-3xl font-bold mb-6">Recommended Campaigns</h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">
+          {recommended.map((donation) => (
+            <DonationCard key={donation._id} donation={donation}></DonationCard>
+          ))}
         </div>
       </div>
     </div>

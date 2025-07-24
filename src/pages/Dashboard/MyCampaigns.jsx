@@ -175,7 +175,7 @@ const MyCampaigns = () => {
         </table>
       </div>
 
-      {/* Donator Modal */}
+      {/* edit Modal */}
       {showEditModal && selectedCampaign && (
         <AnimatePresence>
           <motion.div
@@ -206,6 +206,24 @@ const MyCampaigns = () => {
                   <input
                     {...register("petImage", { required: true })}
                     defaultValue={selectedCampaign.petImage}
+                    className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
+                  />
+                </div>
+
+                 <div>
+                  <label className="block font-medium">Pet Name</label>
+                  <input
+                    {...register("petName", { required: true })}
+                    defaultValue={selectedCampaign.petName}
+                    className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
+                  />
+                </div>
+
+                 <div>
+                  <label className="block font-medium">Pet Category</label>
+                  <input
+                    {...register("petCategory", { required: true })}
+                    defaultValue={selectedCampaign.petCategory}
                     className="w-full border border-gray-300 rounded px-3 py-2 mt-1"
                   />
                 </div>

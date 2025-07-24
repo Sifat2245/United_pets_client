@@ -49,6 +49,7 @@ const CreateCampaign = () => {
     const campaignData = {
       petName: data.petName,
       petImage: imageUrl,
+      petCategory: data.petCategory,
       addedBy: user?.email,
       maxDonation: parseInt(data.maxDonation),
       lastDate: data.lastDate,
@@ -100,6 +101,18 @@ const CreateCampaign = () => {
           />
           {errors.shortDescription && (
             <p className="text-red-500 text-sm">{errors.petName.message}</p>
+          )}
+        </div>
+
+        <div>
+          <label className="block mb-1 font-semibold">Pet Category</label>
+          <input
+            type="text"
+            {...register("petCategory", { required: "Pet category is required" })}
+            className="block w-full p-2 border border-gray-300 rounded"
+          />
+          {errors.petCategory && (
+            <p className="text-red-500 text-sm">{errors.petCategory.message}</p>
           )}
         </div>
 
