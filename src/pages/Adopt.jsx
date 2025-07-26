@@ -7,6 +7,7 @@ import PetCard from "../components/PetCard";
 import PageTitle from "../hooks/PageTitle.";
 import Lottie from "lottie-react";
 import loader from '../../public/loader.json'
+import { useNavigation } from "react-router";
 
 const adoptionFeatures = [
   "All pets are neutered and vaccinated.",
@@ -16,6 +17,7 @@ const adoptionFeatures = [
 
 const Adopt = () => {
   const axiosSecure = useAxiosSecure();
+  const navigation = useNavigation()
 
   const { data: pets = [], isLoading } = useQuery({
     queryKey: ["pets"],
@@ -25,7 +27,9 @@ const Adopt = () => {
     },
   });
 
-  if (isLoading) {
+  const loading = isLoading || navigation.state === 'loading'
+
+  if (loading) {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <div className="w-52">

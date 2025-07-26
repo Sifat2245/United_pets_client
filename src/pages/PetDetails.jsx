@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, { use, useEffect, useState } from "react";
 import { Link, useLoaderData } from "react-router";
 import PageHeading from "../components/reuseable/pageHeadinng";
 import {
@@ -17,12 +17,13 @@ import loader from "../../public/loader.json";
 import AdoptModal from "../components/AdoptModal";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import toast from "react-hot-toast";
+import { AuthContext } from "../context/AuthContext";
+import { useModal } from "../context/ModalProvider";
 
 const PetDetails = () => {
   const pet = useLoaderData();
   const axiosInstance = useAxios();
   const axiosSecure = useAxiosSecure();
-
   const {
     _id,
     image,
@@ -35,6 +36,8 @@ const PetDetails = () => {
     shortDescription,
     longDescription,
   } = pet;
+  const { user } = use(AuthContext);
+  const { openLoginModal } = useModal();
 
   const [relatedPets, setRelatedPets] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -63,12 +66,11 @@ const PetDetails = () => {
   }
 
   const handleAdoptionSubmit = async (data) => {
-    await axiosSecure.post("/adoptionRequest", data)
-    .then(res => {
-      if(res.data.insertedId){
-        toast.success('Adoption Request Sent Successfully') 
+    await axiosSecure.post("/adoptionRequest", data).then((res) => {
+      if (res.data.insertedId) {
+        toast.success("Adoption Request Sent Successfully");
       }
-    })
+    });
   };
 
   return (
@@ -131,12 +133,21 @@ const PetDetails = () => {
           </div>
 
           <div className="mb-24">
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="px-12 py-2 rounded-full bg-[#D61C62] hover:bg-[#018AE0] transition-all duration-300 cursor-pointer text-white font-bold"
-            >
-              Adopt Me
-            </button>
+            {user ? (
+              <button
+                onClick={() => setIsModalOpen(true)}
+                className="px-12 py-2 rounded-full bg-[#D61C62] hover:bg-[#018AE0] transition-all duration-300 cursor-pointer text-white font-bold"
+              >
+                Adopt Me
+              </button>
+            ) : (
+              <button
+                onClick={openLoginModal}
+                className="px-12 py-2 rounded-full bg-[#D61C62] hover:bg-[#018AE0] transition-all duration-300 cursor-pointer text-white font-bold"
+              >
+                Login to Adopt
+              </button>
+            )}
           </div>
 
           <AdoptModal

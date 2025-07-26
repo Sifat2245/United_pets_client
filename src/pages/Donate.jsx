@@ -4,25 +4,23 @@ import PageTitle from "../hooks/PageTitle.";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import Lottie from "lottie-react";
-import loader from '../../public/loader.json'
+import loader from "../../public/loader.json";
 import DonationCard from "../components/DonationCard";
 
 const Donate = () => {
+  const axiosSecure = useAxiosSecure();
 
-    const axiosSecure = useAxiosSecure()
+  const { data: donations = [], isLoading } = useQuery({
+    queryKey: ["donation"],
+    queryFn: async () => {
+      const res = await axiosSecure.get("/donations");
+      return res.data;
+    },
+  });
 
-    const {data: donations = [], isLoading} = useQuery({
-        queryKey: ['donation'],
-        queryFn: async () =>{
-            const res = await axiosSecure.get('/donations')
-            return res.data
-        }
-    })
+  // console.log(donations);
 
-    console.log(donations);
-
-
-      if (isLoading) {
+  if (isLoading) {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <div className="w-52">
@@ -56,9 +54,9 @@ const Donate = () => {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-4/5 mx-auto mb-24">
-            {
-                donations.map(donation => <DonationCard key={donation._id} donation={donation}></DonationCard>)
-            }
+        {donations.map((donation) => (
+          <DonationCard key={donation._id} donation={donation}></DonationCard>
+        ))}
       </div>
     </div>
   );

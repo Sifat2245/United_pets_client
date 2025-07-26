@@ -12,12 +12,14 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase/firebase_init";
 
+
 const googleProvider = new GoogleAuthProvider();
 const twitterProvider = new TwitterAuthProvider()
 
 const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+
 
   const createUser = (email, password) => {
     setLoading(true);

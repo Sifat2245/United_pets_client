@@ -17,8 +17,7 @@ const LoginModal = ({ isOpen, onClose, onOpenSignup }) => {
 
   const onSubmit = (data) => {
     loginUser(data.email, data.password)
-      .then((result) => {
-        console.log("login successful", result.user);
+      .then(() => {
         reset();
         setStatusMessage("");
         onClose();

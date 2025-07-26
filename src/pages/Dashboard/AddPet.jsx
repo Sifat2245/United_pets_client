@@ -86,7 +86,7 @@ const AddPet = () => {
         formData
       );
       setImageUrl(res.data.url);
-      console.log(res.data);
+      // console.log(res.data);
     } catch (error) {
       console.error("Image upload failed:", error);
     }
@@ -118,7 +118,7 @@ const AddPet = () => {
           showConfirmButton: false,
           timer: 1500,
         });
-        console.log("Pet updated:", res.data);
+        // console.log("Pet updated:", res.data);
         reset();
         navigate('/dashboard/my-pets')
         setImageUrl(null);

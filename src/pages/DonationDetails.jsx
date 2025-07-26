@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import PageTitle from "../hooks/PageTitle.";
 import PageHeading from "../components/reuseable/pageHeadinng";
 import { useLoaderData } from "react-router";
@@ -18,6 +18,8 @@ import loader from "../../public/loader.json";
 import useAxiosSecure from "../hooks/useAxiosSecure";
 import DonationCard from "../components/DonationCard";
 import Payment from "./Payment/Payment";
+import { AuthContext } from "../context/AuthContext";
+import { useModal } from "../context/ModalProvider";
 
 const DonationDetails = () => {
   const donationData = useLoaderData();
@@ -34,6 +36,8 @@ const DonationDetails = () => {
     totalDonated = 0,
   } = donationData;
   const axiosSecure = useAxiosSecure();
+  const {user} = use(AuthContext)
+  const {openLoginModal} = useModal()
 
   const progress = Math.min((totalDonated / maxDonation) * 100, 100).toFixed(2);
 
@@ -110,15 +114,21 @@ const DonationDetails = () => {
           </div>
 
           <Dialog>
-            <DialogTrigger asChild>
+            {
+              user? (
+                <DialogTrigger asChild>
               <Button
                 disabled={paused}
                 id="close-donation-modal"
                 className="bg-pink-600 hover:bg-pink-700 text-white"
               >
-                {paused ? "Campaign Paused" : "Donate Now"}
+                {paused ? "Campaign is Inactive right now" : "Donate Now"}
               </Button>
             </DialogTrigger>
+              ):(
+                <button onClick={openLoginModal} className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-md">Login To Donate</button>
+              )
+            }
 
             <DialogContent className="max-w-lg space-y-4 bg-white">
               <DialogHeader>
@@ -250,7 +260,7 @@ const DonationDetails = () => {
         </div>
       </div>
 
-      <div className="w-4/5 mx-auto mb-24">
+      <div className="max-w-5xl mx-auto mb-24">
         <h1 className="text-3xl font-bold mb-6">Recommended Campaigns</h1>
 
         <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8">

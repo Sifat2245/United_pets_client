@@ -24,7 +24,7 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
-    console.log(file);
+    // console.log(file);
     if (file) {
       SetProfileImagePreview(URL.createObjectURL(file));
     } else {
@@ -45,15 +45,15 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
       }/image/upload`,
       formData
     );
-    console.log(res.data);
+    // console.log(res.data);
     setProfileImage(res.data.url);
   };
 
   const onSubmit = (data) => {
     setStatusMessage("");
     createUser(data.email, data.password)
-      .then(async (result) => {
-        console.log("account created", result.user);
+      .then(async () => {
+        // console.log("account created", result.user);
         //update user
         const userProfile = {
           displayName: data.name,
@@ -62,7 +62,7 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
 
         updateUser(userProfile)
           .then(() => {
-            console.log("profile updated successfully");
+            // console.log("profile updated successfully");
             reset();
             SetProfileImagePreview(null);
             setStatusMessage("");
@@ -80,8 +80,8 @@ const SignupModal = ({ isOpen, onClose, onOpenLogin }) => {
           created_at: new Date().toISOString(),
         };
 
-        const userRes = await axiosInstance.post("/users", userInfo);
-        console.log("user stored", userRes.data);
+        const res = await axiosInstance.post("/users", userInfo);
+        console.log("User saved:", res.data);
       })
       .catch((error) => {
         console.log("error found", error);

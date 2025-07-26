@@ -18,13 +18,16 @@ import {
 import { AuthContext } from "../context/AuthContext";
 import logo from "../assets/logo.png";
 import PageTitle from "../hooks/PageTitle.";
+import useUserRole from "../hooks/useUserRole";
 
 const DashboardLayout = () => {
   const { logOut } = useContext(AuthContext);
   const [isOpen, setIsOpen] = useState(false);
-
+  const { role, roleLoading } = useUserRole();
   const toggleDrawer = () => setIsOpen(!isOpen);
   const closeDrawer = () => setIsOpen(false);
+
+  console.log(role);
 
   return (
     <>
@@ -154,50 +157,54 @@ const DashboardLayout = () => {
               <span>My Donations</span>
             </NavLink>
 
-            <NavLink
-              to="all-users"
-              className={({ isActive }) =>
-                `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
-                  isActive
-                    ? "bg-[#018AE0] text-white"
-                    : "hover:bg-gray-100 text-gray-700"
-                }`
-              }
-              onClick={closeDrawer}
-            >
-              <UserRound className="w-5 h-5" />
-              <span>Users</span>
-            </NavLink>
+            {!roleLoading && role === "admin" && (
+              <>
+                <NavLink
+                  to="all-users"
+                  className={({ isActive }) =>
+                    `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
+                      isActive
+                        ? "bg-[#018AE0] text-white"
+                        : "hover:bg-gray-100 text-gray-700"
+                    }`
+                  }
+                  onClick={closeDrawer}
+                >
+                  <UserRound className="w-5 h-5" />
+                  <span>Users</span>
+                </NavLink>
 
-            <NavLink
-              to="all-pets"
-              className={({ isActive }) =>
-                `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
-                  isActive
-                    ? "bg-[#018AE0] text-white"
-                    : "hover:bg-gray-100 text-gray-700"
-                }`
-              }
-              onClick={closeDrawer}
-            >
-              <Dog className="w-5 h-5" />
-              <span>All Pets</span>
-            </NavLink>
+                <NavLink
+                  to="all-pets"
+                  className={({ isActive }) =>
+                    `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
+                      isActive
+                        ? "bg-[#018AE0] text-white"
+                        : "hover:bg-gray-100 text-gray-700"
+                    }`
+                  }
+                  onClick={closeDrawer}
+                >
+                  <Dog className="w-5 h-5" />
+                  <span>All Pets</span>
+                </NavLink>
 
-            <NavLink
-              to="all-donations"
-              className={({ isActive }) =>
-                `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
-                  isActive
-                    ? "bg-[#018AE0] text-white"
-                    : "hover:bg-gray-100 text-gray-700"
-                }`
-              }
-              onClick={closeDrawer}
-            >
-              <Heart className="w-5 h-5" />
-              <span>All Donations</span>
-            </NavLink>
+                <NavLink
+                  to="all-donations"
+                  className={({ isActive }) =>
+                    `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
+                      isActive
+                        ? "bg-[#018AE0] text-white"
+                        : "hover:bg-gray-100 text-gray-700"
+                    }`
+                  }
+                  onClick={closeDrawer}
+                >
+                  <Heart className="w-5 h-5" />
+                  <span>All Donations</span>
+                </NavLink>
+              </>
+            )}
 
             <NavLink
               to="my-profile"

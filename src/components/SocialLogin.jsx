@@ -21,8 +21,9 @@ const SocialLogin = ({ onClose }) => {
       };
 
       try {
-        const res = await axiosInstance.post("/users", userInfo);
-        console.log("User saved:", res.data);
+        const res =  await axiosInstance.post("/users", userInfo);
+        console.log(res.data);
+      
       } catch (postError) {
         console.warn(
           "User might already exist:",
@@ -51,7 +52,7 @@ const SocialLogin = ({ onClose }) => {
 
       try {
         const res = await axiosInstance.post("/users", userInfo);
-        console.log("User saved:", res.data);
+        console.log(res.data);
       } catch (postError) {
         console.warn(
           "User might already exist:",

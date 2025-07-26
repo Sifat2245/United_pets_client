@@ -1,4 +1,4 @@
-import React from "react";
+import Lottie from "lottie-react";
 import { FaMapMarkerAlt, FaMars, FaVenus } from "react-icons/fa";
 import { Link } from "react-router";
 

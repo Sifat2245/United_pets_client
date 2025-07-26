@@ -1,47 +1,47 @@
 import axios from "axios";
-import React, { use } from "react";
+import { useContext, useEffect } from "react";
 import { AuthContext } from "../context/AuthContext";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 
 const axiosSecure = axios.create({
   baseURL: `http://localhost:3000/`,
 });
 
 const useAxiosSecure = () => {
-  const { user, logOut } = use(AuthContext);
+  const { user, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
 
-  const accessToken = user?.accessToken
+  useEffect(() => {
+    const accessToken = user?.accessToken;
 
-  axiosSecure.interceptors.request.use(
-    (config) => {
-      config.headers.Authorization = `Bearer ${accessToken}`;
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
+    const requestInterceptor = axiosSecure.interceptors.request.use(
+      (config) => {
+        if (accessToken) {
+          config.headers.Authorization = `Bearer ${accessToken}`;
+        }
+        return config;
+      },
+      (error) => Promise.reject(error)
+    );
 
-  axiosSecure.interceptors.response.use(
-    (res) => {
-      return res;
-    },
-    (error) => {
-      console.log("error in the interceptor", error);
-      const status = error.status;
-      if (status === 401) {
-        logOut()
-          .then(() => {
-            navigate("/");
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+    const responseInterceptor = axiosSecure.interceptors.response.use(
+      (res) => res,
+      (error) => {
+        const status = error?.response?.status;
+        if (status === 401) {
+          logOut()
+            .then(() => navigate("/"))
+            .catch((err) => console.error(err));
+        }
+        return Promise.reject(error);
       }
-      return Promise.reject(error);
-    }
-  );
+    );
+
+    return () => {
+      axiosSecure.interceptors.request.eject(requestInterceptor);
+      axiosSecure.interceptors.response.eject(responseInterceptor);
+    };
+  }, [user?.accessToken, logOut, navigate]);
 
   return axiosSecure;
 };
