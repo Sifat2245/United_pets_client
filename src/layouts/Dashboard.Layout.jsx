@@ -201,7 +201,7 @@ const DashboardLayout = () => {
                   onClick={closeDrawer}
                 >
                   <Heart className="w-5 h-5" />
-                  <span>All Donations</span>
+                  <span>All Campaigns</span>
                 </NavLink>
               </>
             )}

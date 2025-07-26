@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import PageHeading from "../components/reuseable/pageHeadinng";
 import { FaCheckSquare } from "react-icons/fa";
 import useAxiosSecure from "../hooks/useAxiosSecure";
@@ -8,6 +8,8 @@ import PageTitle from "../hooks/PageTitle.";
 import Lottie from "lottie-react";
 import loader from '../../public/loader.json'
 import { useNavigation } from "react-router";
+import { useInView } from "react-intersection-observer";
+import useInfiniteAdoptPets from "../hooks/useInfiniteAdoptPets";
 
 const adoptionFeatures = [
   "All pets are neutered and vaccinated.",
@@ -18,18 +20,33 @@ const adoptionFeatures = [
 const Adopt = () => {
   const axiosSecure = useAxiosSecure();
   const navigation = useNavigation()
+  const {
+    data,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+    status,
+  } = useInfiniteAdoptPets();
 
-  const { data: pets = [], isLoading } = useQuery({
-    queryKey: ["pets"],
-    queryFn: async () => {
-      const res = await axiosSecure.get("/pets/not-adopted");
-      return res.data;
-    },
-  });
+   const { ref, inView } = useInView();
 
-  const loading = isLoading || navigation.state === 'loading'
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, fetchNextPage]);
 
-  if (loading) {
+  // const { data: pets = [], isLoading } = useQuery({
+  //   queryKey: ["pets"],
+  //   queryFn: async () => {
+  //     const res = await axiosSecure.get("/pets/not-adopted");
+  //     return res.data;
+  //   },
+  // });
+
+  // const loading = isLoading || navigation.state === 'loading'
+
+  if (status === 'loading') {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <div className="w-52">
@@ -89,10 +106,16 @@ const Adopt = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 my-24 w-4/5 mx-auto">
-        {pets.map((pet) => (
-          <PetCard key={pet._id} pet={pet}></PetCard>
-        ))}
+       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8 my-24 w-4/5 mx-auto">
+        {data?.pages.map((page) =>
+          page.pets.map((pet) => <PetCard key={pet._id} pet={pet} />)
+        )}
+      </div>
+
+      <div ref={ref} className="text-center pb-10">
+        {isFetchingNextPage ? (
+          <p className="text-gray-600">Loading more pets...</p>
+        ) :''}
       </div>
     </div>
   );
