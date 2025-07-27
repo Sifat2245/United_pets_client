@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
             {
                 path:'/pet-details/:id',
                 Component: PetDetails,
-                loader: ({params}) => fetch(`http://localhost:3000/pets/${params.id}`)
+                loader: ({params}) => fetch(`https://united-pets-server.vercel.app/pets/${params.id}`)
             },
             {
                 path:'/donate',
@@ -48,7 +48,7 @@ export const router = createBrowserRouter([
             {
                 path:'/donation-details/:id',
                 Component: DonationDetails,
-                loader: ({params}) => fetch(`http://localhost:3000/donations/${params.id}`)
+                loader: ({params}) => fetch(`https://united-pets-server.vercel.app/donations/${params.id}`)
             },
             {
                 path:'/services',
