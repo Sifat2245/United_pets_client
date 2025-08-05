@@ -2,15 +2,26 @@ import React, { use } from "react";
 import { FaGoogle, FaTwitter } from "react-icons/fa";
 import { AuthContext } from "../context/AuthContext";
 import useAxios from "../hooks/useAxios";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
 
 const SocialLogin = ({ onClose }) => {
-  const { signInWithGoogle, signInWithTwitter } = use(AuthContext);
+  const { signInWithGoogle, signInWithTwitter, logOut } = use(AuthContext);
   const axiosInstance = useAxios();
+  const axiosSecure = useAxiosSecure();
 
   const handleGoogleLogin = async () => {
     try {
       const result = await signInWithGoogle();
       const user = result.user;
+      const res = await axiosSecure.get(`/user/email/${user.email}`);
+      const dbUser = res.data;
+
+      if (dbUser?.banned) {
+        await logOut();
+        Swal.fire("Access Denied", "Your account has been banned.", "error");
+        return;
+      }
 
       const userInfo = {
         email: user.email,
@@ -21,9 +32,8 @@ const SocialLogin = ({ onClose }) => {
       };
 
       try {
-        const res =  await axiosInstance.post("/users", userInfo);
+        const res = await axiosInstance.post("/users", userInfo);
         console.log(res.data);
-      
       } catch (postError) {
         console.warn(
           "User might already exist:",
@@ -41,6 +51,15 @@ const SocialLogin = ({ onClose }) => {
     try {
       const result = await signInWithTwitter();
       const user = result.user;
+
+      const res = await axiosSecure.get(`/user/email/${user.email}`);
+      const dbUser = res.data;
+
+      if (dbUser?.banned) {
+        await logOut();
+        Swal.fire("Access Denied", "Your account has been banned.", "error");
+        return;
+      }
 
       const userInfo = {
         email: user.email || `${user.uid}@twitter.local`,

@@ -4,6 +4,7 @@ import React, { use, useState } from "react";
 import { useForm } from "react-hook-form";
 import SocialLogin from "./SocialLogin";
 import { AuthContext } from "../context/AuthContext";
+import useAxiosSecure from "../hooks/useAxiosSecure";
 
 const LoginModal = ({ isOpen, onClose, onOpenSignup }) => {
   const {
@@ -12,20 +13,31 @@ const LoginModal = ({ isOpen, onClose, onOpenSignup }) => {
     formState: { errors },
     reset,
   } = useForm();
-  const { loginUser, loading } = use(AuthContext);
+  const { loginUser, loading, logOut } = use(AuthContext);
   const [statusMessage, setStatusMessage] = useState("");
+  const axiosSecure = useAxiosSecure()
 
-  const onSubmit = (data) => {
-    loginUser(data.email, data.password)
-      .then(() => {
-        reset();
-        setStatusMessage("");
-        onClose();
-      })
-      .catch((error) => {
-        console.log("there are some error", error);
-      });
+  const onSubmit = async (data) => {
+    try {
+      const result = await loginUser(data.email, data.password);
+      const loggedUser = result.user;
+      const res = await axiosSecure.get(`/user/email/${loggedUser.email}`);
+      const dbUser = res.data;
+
+      if (dbUser?.banned) {
+        await logOut();
+        setStatusMessage("Your account has been banned.");
+        return;
+      }
+      reset();
+      setStatusMessage("");
+      onClose();
+    } catch (error) {
+      console.log("Login error", error);
+      setStatusMessage("Login failed. Please check your credentials.");
+    }
   };
+
 
   const handleSignupClick = (e) => {
     e.preventDefault();

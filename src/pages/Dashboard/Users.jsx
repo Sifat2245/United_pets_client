@@ -43,7 +43,7 @@ const Users = () => {
     });
 
     if (confirm.isConfirmed) {
-      await axiosSecure.patch(`/users/${id}/ban`);
+      await axiosSecure.patch(`/user/${id}/ban`);
       Swal.fire("Banned!", "User has been banned.", "success");
       refetch();
     }

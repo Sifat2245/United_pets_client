@@ -1,4 +1,4 @@
-import React from "react";
+import React, { use } from "react";
 import { FaDonate, FaHeart } from "react-icons/fa";
 import { GiDogHouse } from "react-icons/gi";
 import { MdOutlinePets } from "react-icons/md";
@@ -11,8 +11,12 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
+import useAxiosSecure from "../../hooks/useAxiosSecure";
+import { useQuery } from "@tanstack/react-query";
+import { AuthContext } from "../../context/AuthContext";
+import { Skeleton } from "@/components/ui/skeleton"
 
-const Overview = ({ stats }) => {
+const Overview = () => {
   const adoptionData = [
     { day: "Mon", requests: 3 },
     { day: "Tue", requests: 5 },
@@ -22,6 +26,21 @@ const Overview = ({ stats }) => {
     { day: "Sat", requests: 4 },
     { day: "Sun", requests: 7 },
   ];
+  const {user} = use(AuthContext)
+
+  const axiosSecure = useAxiosSecure();
+  const {data: stats = [], isLoading} = useQuery({
+    queryKey: ['userOverview', user?.email],
+    enabled: !!user?.email,
+    queryFn: async () => {
+      const res = await axiosSecure.get(`/user-overview/${user.email}`);
+      return res.data;
+    }
+  })
+
+  // if(isLoading){
+  //   return <Skeleton className="h-4 w-[250px]" />
+  // }
 
   return (
     <div className="p-6 space-y-6">
@@ -35,7 +54,7 @@ const Overview = ({ stats }) => {
           </div>
           <div>
             <p className="text-sm font-medium text-gray-500">Pets Added</p>
-            <p className="text-xl font-semibold">{10}</p>
+            <p className="text-xl font-semibold">{isLoading ? <Skeleton className="h-5 w-[120px]" /> : stats.petsAdded}</p>
           </div>
         </div>
 
@@ -48,9 +67,9 @@ const Overview = ({ stats }) => {
             <p className="text-sm font-medium text-gray-500">
               Adoption Requests
             </p>
-            <p className="text-xl font-semibold">{4}</p>
+            <p className="text-xl font-semibold">{isLoading ? <Skeleton className="h-4 w-full" /> : stats.adoptionRequests}</p>
             {/* {stats.pendingRequests > 0 && ( */}
-            <p className="text-xs text-red-500">Pending: {6}</p>
+            <p className="text-xs text-red-500">Pending: {isLoading?  <Skeleton className="h-4 w-full" />: stats.pendingAdoptions}</p>
           </div>
         </div>
 
@@ -63,7 +82,7 @@ const Overview = ({ stats }) => {
             <p className="text-sm font-medium text-gray-500">
               Active Campaigns
             </p>
-            <p className="text-xl font-semibold">{8}</p>
+            <p className="text-xl font-semibold">{isLoading? <Skeleton className="h-4 w-full" />: stats.activeCampaigns}</p>
           </div>
         </div>
       </div>
@@ -78,7 +97,7 @@ const Overview = ({ stats }) => {
             <p className="text-sm font-medium text-gray-500">
               Total Donations Made
             </p>
-            <p className="text-2xl font-semibold">{500}</p>
+            <p className="text-2xl font-semibold">{isLoading? <Skeleton className="h-4 w-full" />: stats.totalDonations}৳</p>
           </div>
         </div>
 

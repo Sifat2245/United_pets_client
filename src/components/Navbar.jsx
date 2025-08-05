@@ -5,7 +5,7 @@ import { NavLink } from "react-router";
 import SignupModal from "./SignupModal";
 import LoginModal from "./LoginModal";
 import { AuthContext } from "../context/AuthContext";
-import { motion } from "framer-motion"; //eslint-disable-line
+import { AnimatePresence, motion } from "framer-motion"; //eslint-disable-line
 import { useModal } from "../context/ModalProvider";
 
 const Navbar = () => {
@@ -43,6 +43,7 @@ const Navbar = () => {
     <>
       <NavLink
         to={"/"}
+        onClick={() => setIsOpen(false)}
         className={({ isActive }) =>
           `hover:text-[#D61C62] transition-all duration-300 ${
             isActive ? "text-[#D61C62]" : ""
@@ -53,6 +54,7 @@ const Navbar = () => {
       </NavLink>
       <NavLink
         to={"/Adopt"}
+        onClick={() => setIsOpen(false)}
         className={({ isActive }) =>
           `hover:text-[#D61C62] transition-all duration-300 ${
             isActive ? "text-[#D61C62]" : ""
@@ -63,6 +65,7 @@ const Navbar = () => {
       </NavLink>
       <NavLink
         to={"/donate"}
+        onClick={() => setIsOpen(false)}
         className={({ isActive }) =>
           `hover:text-[#D61C62] transition-all duration-300 ${
             isActive ? "text-[#D61C62]" : ""
@@ -73,6 +76,7 @@ const Navbar = () => {
       </NavLink>
       <NavLink
         to={"/services"}
+        onClick={() => setIsOpen(false)}
         className={({ isActive }) =>
           `hover:text-[#D61C62] transition-all duration-300 ${
             isActive ? "text-[#D61C62]" : ""
@@ -83,6 +87,7 @@ const Navbar = () => {
       </NavLink>
       <NavLink
         to={"/about"}
+        onClick={() => setIsOpen(false)}
         className={({ isActive }) =>
           `hover:text-[#D61C62] transition-all duration-300 ${
             isActive ? "text-[#D61C62]" : ""
@@ -93,6 +98,7 @@ const Navbar = () => {
       </NavLink>
       <NavLink
         to={"/contact"}
+        onClick={() => setIsOpen(false)}
         className={({ isActive }) =>
           `hover:text-[#D61C62] transition-all duration-300 ${
             isActive ? "text-[#D61C62]" : ""
@@ -105,6 +111,7 @@ const Navbar = () => {
         <>
           <NavLink
             to={"/dashboard"}
+            onClick={() => setIsOpen(false)}
             className={({ isActive }) =>
               `hover:text-[#D61C62] transition-all duration-300 ${
                 isActive ? "text-[#D61C62]" : ""
@@ -178,62 +185,70 @@ const Navbar = () => {
         </div>
 
         {/* Mobile Menu (conditionally rendered) */}
-        {isOpen && (
-          <>
-            {/* Backdrop */}
-            <div
-              className="fixed inset-0 bg-[#0000003d] bg-opacity-40 z-30"
-              onClick={() => setIsOpen(false)}
-            ></div>
+        <AnimatePresence>
+          {isOpen && (
+            <>
+              {/* Backdrop */}
+              <motion.div
+                key="backdrop"
+                className="fixed inset-0 bg-[#0000003d] bg-opacity-40 z-30"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setIsOpen(false)}
+              />
 
-            {/* Drawer (Animated) */}
-            <div
-              className={`fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-40 transform transition-transform duration-300 ease-in-out ${
-                isOpen ? "translate-x-0" : "-translate-x-full"
-              }`}
-            >
-              <div className="flex items-center justify-between px-4 py-4 border-b">
-                <span className="text-lg font-semibold text-gray-800">
-                  Menu
-                </span>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  aria-label="Close drawer"
-                >
-                  <X className="h-6 w-6 text-gray-600" />
-                </button>
-              </div>
-              <div className="flex flex-col p-4 space-y-4">
-                {navLinks}
-                <div className="pt-4 border-t border-gray-200 space-y-2">
-                  {user ? (
-                    <button
-                      className="px-4 py-2 rounded-md text-gray-700 font-semibold border border-gray-500 hover:bg-gray-100 transition-colors duration-200"
-                      onClick={() => logOut()}
-                    >
-                      Logout
-                    </button>
-                  ) : (
-                    <>
+              {/* Drawer (Animated) */}
+              <motion.div
+                initial={{ x: "-100%" }}
+                animate={{ x: isOpen ? 0 : "-100%" }}
+                exit={{ x: "-100%" }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-60"
+              >
+                <div className="flex items-center justify-between px-4 py-4 border-b">
+                  <span className="text-lg font-semibold text-gray-800">
+                    Menu
+                  </span>
+                  <button
+                    onClick={() => setIsOpen(false)}
+                    aria-label="Close drawer"
+                  >
+                    <X className="h-6 w-6 text-gray-600" />
+                  </button>
+                </div>
+                <div className="flex flex-col p-4 space-y-4">
+                  {navLinks}
+                  <div className="pt-4 border-t border-gray-200 space-y-2">
+                    {user ? (
                       <button
                         className="px-4 py-2 rounded-md text-gray-700 font-semibold border border-gray-500 hover:bg-gray-100 transition-colors duration-200"
-                        onClick={openLoginModal}
+                        onClick={() => logOut()}
                       >
-                        Login
+                        Logout
                       </button>
-                      <button
-                        className="px-4 py-2 rounded-md text-white bg-[#018AE0] font-semibold border border-[#018AE0] hover:bg-[#0174e0] transition-colors duration-200"
-                        onClick={openSignupModal}
-                      >
-                        Signup
-                      </button>
-                    </>
-                  )}
+                    ) : (
+                      <>
+                        <button
+                          className="px-4 py-2 rounded-md text-gray-700 font-semibold border border-gray-500 hover:bg-gray-100 transition-colors duration-200"
+                          onClick={openLoginModal}
+                        >
+                          Login
+                        </button>
+                        <button
+                          className="px-4 py-2 rounded-md text-white bg-[#018AE0] font-semibold border border-[#018AE0] hover:bg-[#0174e0] transition-colors duration-200"
+                          onClick={openSignupModal}
+                        >
+                          Signup
+                        </button>
+                      </>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </div>
-          </>
-        )}
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>
       </nav>
 
       <motion.nav
@@ -299,64 +314,7 @@ const Navbar = () => {
             )}
           </div>
         </div>
-
-        {/* Mobile Menu (conditionally rendered) */}
-        {isOpen && (
-          <>
-            {/* Backdrop */}
-            <div
-              className="fixed inset-0 bg-[#0000003d] bg-opacity-40 z-30"
-              onClick={() => setIsOpen(false)}
-            ></div>
-
-            {/* Drawer (Animated) */}
-            <div
-              className={`fixed top-0 left-0 w-64 h-full bg-white shadow-lg z-40 transform transition-transform duration-300 ease-in-out ${
-                isOpen ? "translate-x-0" : "-translate-x-full"
-              }`}
-            >
-              <div className="flex items-center justify-between px-4 py-4 border-b">
-                <span className="text-lg font-semibold text-gray-800">
-                  Menu
-                </span>
-                <button
-                  onClick={() => setIsOpen(false)}
-                  aria-label="Close drawer"
-                >
-                  <X className="h-6 w-6 text-gray-600" />
-                </button>
-              </div>
-              <div className="flex flex-col p-4 space-y-4">
-                {navLinks}
-                <div className="pt-4 border-t border-gray-200 space-y-2">
-                  {user ? (
-                    <button
-                      className="px-4 py-2 rounded-md text-gray-700 font-semibold border border-gray-500 hover:bg-gray-100 transition-colors duration-200"
-                      onClick={() => logOut()}
-                    >
-                      Logout
-                    </button>
-                  ) : (
-                    <>
-                      <button
-                        className="px-4 py-2 rounded-md text-gray-700 font-semibold border border-gray-500 hover:bg-gray-100 transition-colors duration-200"
-                        onClick={openLoginModal}
-                      >
-                        Login
-                      </button>
-                      <button
-                        className="px-4 py-2 rounded-md text-white bg-[#018AE0] font-semibold border border-[#018AE0] hover:bg-[#0174e0] transition-colors duration-200"
-                        onClick={openSignupModal}
-                      >
-                        Signup
-                      </button>
-                    </>
-                  )}
-                </div>
-              </div>
-            </div>
-          </>
-        )}
+       
       </motion.nav>
 
       <SignupModal
