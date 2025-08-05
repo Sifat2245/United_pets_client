@@ -1,15 +1,13 @@
 import React, { useEffect } from "react";
 import PageHeading from "../components/reuseable/pageHeadinng";
 import { FaCheckSquare } from "react-icons/fa";
-import useAxiosSecure from "../hooks/useAxiosSecure";
-import { useQuery } from "@tanstack/react-query";
 import PetCard from "../components/PetCard";
 import PageTitle from "../hooks/PageTitle.";
 import Lottie from "lottie-react";
 import loader from '../../public/loader.json'
-import { useNavigation } from "react-router";
 import { useInView } from "react-intersection-observer";
 import useInfiniteAdoptPets from "../hooks/useInfiniteAdoptPets";
+import { useNavigation } from "react-router";
 
 const adoptionFeatures = [
   "All pets are neutered and vaccinated.",
@@ -18,15 +16,13 @@ const adoptionFeatures = [
 ];
 
 const Adopt = () => {
-  const axiosSecure = useAxiosSecure();
-  const navigation = useNavigation()
   const {
     data,
     fetchNextPage,
     hasNextPage,
     isFetchingNextPage,
-    status,
   } = useInfiniteAdoptPets();
+  const navigation = useNavigation()
 
    const { ref, inView } = useInView();
 
@@ -36,17 +32,8 @@ const Adopt = () => {
     }
   }, [inView, hasNextPage, fetchNextPage]);
 
-  // const { data: pets = [], isLoading } = useQuery({
-  //   queryKey: ["pets"],
-  //   queryFn: async () => {
-  //     const res = await axiosSecure.get("/pets/not-adopted");
-  //     return res.data;
-  //   },
-  // });
-
-  // const loading = isLoading || navigation.state === 'loading'
-
-  if (status === 'loading') {
+ 
+  if (navigation.state === 'loading') {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <div className="w-52">

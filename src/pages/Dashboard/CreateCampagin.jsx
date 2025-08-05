@@ -4,6 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router";
 
 const CreateCampaign = () => {
   const [uploading, setUploading] = useState(false);
@@ -15,6 +16,7 @@ const CreateCampaign = () => {
   } = useForm();
   const axiosSecure = useAxiosSecure();
   const { user } = use(AuthContext);
+  const navigate = useNavigate()
 
   const imageUpload = async (imageFile) => {
     const formData = new FormData();
@@ -66,6 +68,7 @@ const CreateCampaign = () => {
       await axiosSecure.post("/donations", campaignData);
       toast.success("Donation campaign created!");
       reset();
+      navigate('/dashboard/my-campaigns')
     } catch (error) {
       toast.error("Failed to create campaign.", error);
     }

@@ -1,20 +1,49 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import PageHeading from "../components/reuseable/pageHeadinng";
-import {
-  FaEnvelope,
-  FaMapMarkerAlt,
-  FaPhoneAlt,
-  FaFacebookF,
-  FaTwitter,
-  FaInstagram,
-  FaPinterest,
-} from "react-icons/fa";
+import { FaEnvelope, FaMapMarkerAlt, FaPhoneAlt } from "react-icons/fa";
 import PageTitle from "../hooks/PageTitle.";
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const Contact = () => {
+  const axiosSecure = useAxiosSecure();
+  const formRef = useRef();
+  const [loading, setLoading] = useState(false);
+
+  const handleSendEmail = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData(formRef.current);
+    const emailData = {
+      fromName: formData.get("fromName"),
+      fromEmail: formData.get("fromEmail"),
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+    };
+
+    console.log(emailData);
+    try {
+      const res = await axiosSecure.post("/send-mail", emailData);
+      if (res.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Message Sent!",
+          text: "Thank you for contacting us. We will get back to you shortly.",
+          confirmButtonColor: "#018AE0",
+        });
+      }
+    } catch (error) {
+      toast.error("failed to send message");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div>
-      <PageTitle title={'Contact - United Pets'}></PageTitle>
+      <PageTitle title={"Contact - United Pets"}></PageTitle>
       <PageHeading
         title={"Contact Us"}
         breadcrumb={[
@@ -52,7 +81,6 @@ const Contact = () => {
                     className="mt-2 text-sm text-gray-600 hover:text-primary transition"
                   >
                     mdsaifuddinahmed360@gmail.com
-
                   </a>
                 </div>
                 {/* Visit Us Card */}
@@ -64,7 +92,7 @@ const Contact = () => {
                     Visit us
                   </h3>
                   <p className="mt-2 text-sm text-gray-600">
-                   Narayanganj - Bangladesh
+                    Narayanganj - Bangladesh
                   </p>
                 </div>
                 {/* Call Us Card */}
@@ -90,7 +118,11 @@ const Contact = () => {
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900">
                 Send us a message
               </h2>
-              <form className="mt-8 space-y-6">
+              <form
+                ref={formRef}
+                onSubmit={handleSendEmail}
+                className="mt-8 space-y-6"
+              >
                 <div className="grid sm:grid-cols-2 gap-6">
                   {/* Name Input */}
                   <div>
@@ -103,6 +135,7 @@ const Contact = () => {
                     <input
                       type="text"
                       id="name"
+                      name="fromName"
                       className="block w-full rounded-md border-2 border-[#D61C62] shadow-sm py-3 px-4 focus:ring-form-border focus:border-form-border"
                     />
                   </div>
@@ -116,6 +149,7 @@ const Contact = () => {
                     </label>
                     <input
                       type="email"
+                      name="fromEmail"
                       id="email"
                       className="block w-full rounded-md border-2 border-[#D61C62] shadow-sm py-3 px-4 focus:ring-form-border focus:border-form-border"
                     />
@@ -131,6 +165,7 @@ const Contact = () => {
                   </label>
                   <input
                     type="text"
+                    name="subject"
                     id="subject"
                     className="block w-full rounded-md border-2 border-[#D61C62] shadow-sm py-3 px-4 focus:ring-form-border focus:border-form-border"
                   />
@@ -145,6 +180,7 @@ const Contact = () => {
                   </label>
                   <textarea
                     id="message"
+                    name="message"
                     rows="8"
                     className="block w-full rounded-md border-2 border-[#D61C62] shadow-sm py-3 px-4 focus:ring-form-border focus:border-form-border"
                   ></textarea>
@@ -155,7 +191,7 @@ const Contact = () => {
                     type="submit"
                     className="inline-flex justify-center py-3 px-8 shadow-sm text-base font-semibold rounded-full text-white bg-[#018AE0] hover:bg-[#018AE0]/80 hover:cursor-pointer"
                   >
-                    SEND MESSAGE
+                    {loading ? "Sending" : "Send Message"}
                   </button>
                 </div>
               </form>
