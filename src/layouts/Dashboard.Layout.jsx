@@ -19,6 +19,7 @@ import { AuthContext } from "../context/AuthContext";
 import logo from "../assets/logo.png";
 import PageTitle from "../hooks/PageTitle.";
 import useUserRole from "../hooks/useUserRole";
+import { FaPaw } from "react-icons/fa";
 
 const DashboardLayout = () => {
   const { logOut } = useContext(AuthContext);
@@ -110,6 +111,21 @@ const DashboardLayout = () => {
             >
               <FileText className="w-5 h-5" />
               <span>Adoption Requests</span>
+            </NavLink>
+
+            <NavLink
+              to="my-adoption"
+              className={({ isActive }) =>
+                `flex items-center space-x-2 px-3 py-2 rounded-lg transition ${
+                  isActive
+                    ? "bg-[#018AE0] text-white"
+                    : "hover:bg-gray-100 text-gray-700"
+                }`
+              }
+              onClick={closeDrawer}
+            >
+              <FaPaw className="w-5 h-5" />
+              <span>My Adoption</span>
             </NavLink>
 
             <NavLink
