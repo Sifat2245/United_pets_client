@@ -33,21 +33,27 @@ const Users = () => {
     }
   };
 
-  const handleBanUser = async (id) => {
-    const confirm = await Swal.fire({
-      title: "Ban this user?",
-      text: "They will not be able to log in anymore.",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Yes, ban user",
-    });
+  const handleToggleBan = async (id, isBanned) => {
+  const confirm = await Swal.fire({
+    title: isBanned ? "Unban this user?" : "Ban this user?",
+    text: isBanned
+      ? "They will be able to log in again."
+      : "They will not be able to log in anymore.",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonText: isBanned ? "Yes, unban user" : "Yes, ban user",
+  });
 
-    if (confirm.isConfirmed) {
-      await axiosSecure.patch(`/user/${id}/ban`);
-      Swal.fire("Banned!", "User has been banned.", "success");
-      refetch();
-    }
-  };
+  if (confirm.isConfirmed) {
+    await axiosSecure.patch(`/user/${id}/ban`, { banned: !isBanned });
+    Swal.fire(
+      "Success!",
+      isBanned ? "User has been unbanned." : "User has been banned.",
+      "success"
+    );
+    refetch();
+  }
+};
 
   if (isLoading)
     return <div className="text-center py-10">Loading users...</div>;
@@ -99,14 +105,16 @@ const Users = () => {
                     <span className="text-gray-400 italic">
                       Admin (Cannot ban)
                     </span>
-                  ) : user.banned ? (
-                    <span className="text-red-500 font-medium">Banned</span>
                   ) : (
                     <button
-                      onClick={() => handleBanUser(user._id)}
-                      className="bg-red-500 hover:bg-red-600 px-3 py-1 text-white rounded"
+                      onClick={() => handleToggleBan(user._id, user.banned)}
+                      className={`${
+                        user.banned
+                          ? "bg-green-500 hover:bg-green-600"
+                          : "bg-red-500 hover:bg-red-600"
+                      } px-3 py-1 text-white rounded`}
                     >
-                      Ban User
+                      {user.banned ? "Unban User" : "Ban User"}
                     </button>
                   )}
                 </td>

@@ -95,6 +95,7 @@ const AdoptModal = ({ isOpen, onClose, pet, onSubmitAdoption }) => {
                   <label className="text-sm font-medium">Phone Number</label>
                   <input
                     type="tel"
+                    defaultValue={user?.phone}
                     {...register("phone", { required: true })}
                     placeholder="Enter your phone number"
                     className="w-full px-3 py-2 border rounded"
