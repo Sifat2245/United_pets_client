@@ -24,7 +24,7 @@ const PetCardSkeleton = () => {
 
         {/* Location */}
         <div className="flex items-center gap-2">
-          <Skeleton className="h-4 w-4 rounded-full bg-neutral-200" /> {/* map icon */}
+          <Skeleton className="h-4 w-4 rounded-full bg-neutral-200" />
           <Skeleton className="h-4 w-28 rounded bg-neutral-200" />
         </div>
 

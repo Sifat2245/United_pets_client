@@ -1,13 +1,16 @@
 import React from "react";
 import { Cat, Dog, Rabbit, Fish, PawPrint } from "lucide-react";
+import { useNavigate } from "react-router";
 
 const Categories = () => {
+  const navigate = useNavigate()
+
   const petCategories = [
-    { name: "Cats", icon: Cat, description: "Furry feline friends" },
-    { name: "Dogs", icon: Dog, description: "Loyal canine companions" },
-    { name: "Rabbits", icon: Rabbit, description: "Hopping bundles of joy" },
+    { name: "Cat", icon: Cat, description: "Furry feline friends" },
+    { name: "Dog", icon: Dog, description: "Loyal canine companions" },
+    { name: "Rabbit", icon: Rabbit, description: "Hopping bundles of joy" },
     { name: "Fish", icon: Fish, description: "Aquatic wonders" },
-    { name: "Birds", icon: PawPrint, description: "Feathered singing pals" },
+    { name: "Bird", icon: PawPrint, description: "Feathered singing pals" },
     {
       name: "Reptiles",
       icon: PawPrint,
@@ -26,7 +29,7 @@ const Categories = () => {
   ];
 
   const handleCategoryClick = (categoryName) => {
-    console.log(`Clicked on ${categoryName} category`);
+    navigate(`/category/${categoryName}`)
   };
 
   return (

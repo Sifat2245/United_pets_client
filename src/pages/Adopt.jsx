@@ -3,11 +3,8 @@ import PageHeading from "../components/reuseable/pageHeadinng";
 import { FaCheckSquare } from "react-icons/fa";
 import PetCard from "../components/PetCard";
 import PageTitle from "../hooks/PageTitle.";
-import Lottie from "lottie-react";
-import loader from "../../public/loader.json";
 import { useInView } from "react-intersection-observer";
 import useInfiniteAdoptPets from "../hooks/useInfiniteAdoptPets";
-import { useNavigation } from "react-router";
 import PetCardSkeleton from "../components/PetCardSkeleton";
 
 const adoptionFeatures = [
@@ -19,7 +16,6 @@ const adoptionFeatures = [
 const Adopt = () => {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
     useInfiniteAdoptPets();
-  const navigation = useNavigation();
 
   const { ref, inView } = useInView();
 
@@ -29,15 +25,6 @@ const Adopt = () => {
     }
   }, [inView, hasNextPage, fetchNextPage]);
 
-  if (navigation.state === "loading") {
-    return (
-      <div className="min-h-screen flex justify-center items-center">
-        <div className="w-52">
-          <Lottie animationData={loader} loop={true}></Lottie>
-        </div>
-      </div>
-    );
-  }
 
   return (
     <div>

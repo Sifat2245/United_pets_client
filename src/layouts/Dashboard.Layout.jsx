@@ -42,6 +42,9 @@ const DashboardLayout = () => {
           lg:translate-x-0
           ${isOpen ? "translate-x-0" : "-translate-x-full"}`}
         >
+          <button className="absolute right-4 lg:hidden" onClick={() => closeDrawer()}>
+            <X></X>
+          </button>
           <a href="/" className="flex items-center mb-6">
             <img src={logo} alt="Logo" className="h-10 md:h-14 w-auto" />
           </a>
@@ -172,7 +175,10 @@ const DashboardLayout = () => {
             {roleLoading ? (
               <div className="space-y-3">
                 {Array.from({ length: 3 }).map((_, i) => (
-                  <Skeleton key={i} className="h-10 w-full rounded-md bg-white" />
+                  <Skeleton
+                    key={i}
+                    className="h-10 w-full rounded-md bg-white"
+                  />
                 ))}
               </div>
             ) : (
@@ -266,10 +272,19 @@ const DashboardLayout = () => {
         <main className="flex-1 min-h-screen lg:ml-64 p-6 transition-all duration-300 overflow-x-hidden">
           {/* Header */}
           <div className="flex items-center justify-between bg-white shadow rounded-lg px-6 py-3 mb-6 ">
-            <h2 className="text-lg font-semibold text-gray-700">
-              Welcome to your Dashboard
-            </h2>
-
+            <div className="flex gap-4">
+              {/* Mobile Menu Button */}
+              <button className="lg:hidden" onClick={toggleDrawer}>
+                {isOpen ? (
+                  <X className="h-6 w-6" />
+                ) : (
+                  <Menu className="h-6 w-6" />
+                )}
+              </button>
+              <h2 className="text-lg font-semibold text-gray-700 invisible md:visible">
+                Welcome to your Dashboard
+              </h2>
+            </div>
             <div className="flex items-center space-x-6">
               <button className="relative">
                 <Bell className="w-6 h-6 text-gray-600 hover:text-[#1446A0]" />
@@ -280,7 +295,9 @@ const DashboardLayout = () => {
 
               <div className="flex items-center space-x-3">
                 <img
-                  src={user?.photoURL || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"}
+                  src={
+                    user?.photoURL || "https://i.ibb.co/MBtjqXQ/no-avatar.gif"
+                  }
                   alt="User Avatar"
                   className="w-10 h-10 rounded-full border"
                 />
@@ -288,14 +305,6 @@ const DashboardLayout = () => {
                   {user?.displayName || "Guest"}
                 </span>
               </div>
-
-              {/* Mobile Menu Button */}
-              <button
-                className="lg:hidden"
-                onClick={toggleDrawer}
-              >
-                {isOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </button>
             </div>
           </div>
 
