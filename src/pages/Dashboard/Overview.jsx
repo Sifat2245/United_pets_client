@@ -14,7 +14,7 @@ import {
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { useQuery } from "@tanstack/react-query";
 import { AuthContext } from "../../context/AuthContext";
-import { Skeleton } from "@/components/ui/skeleton"
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Overview = () => {
   const adoptionData = [
@@ -26,21 +26,18 @@ const Overview = () => {
     { day: "Sat", requests: 4 },
     { day: "Sun", requests: 7 },
   ];
-  const {user} = use(AuthContext)
+  const { user } = use(AuthContext);
 
   const axiosSecure = useAxiosSecure();
-  const {data: stats = [], isLoading} = useQuery({
-    queryKey: ['userOverview', user?.email],
+  const { data: stats = [], isLoading } = useQuery({
+    queryKey: ["userOverview", user?.email],
     enabled: !!user?.email,
     queryFn: async () => {
       const res = await axiosSecure.get(`/user-overview/${user.email}`);
       return res.data;
-    }
-  })
+    },
+  });
 
-  // if(isLoading){
-  //   return <Skeleton className="h-4 w-[250px]" />
-  // }
 
   return (
     <div className="p-6 space-y-6">
@@ -54,7 +51,13 @@ const Overview = () => {
           </div>
           <div>
             <p className="text-sm font-medium text-gray-500">Pets Added</p>
-            <p className="text-xl font-semibold">{isLoading ? <Skeleton className="h-5 w-[120px]" /> : stats.petsAdded}</p>
+            <p className="text-xl font-semibold">
+              {isLoading ? (
+                <Skeleton className="h-6 w-16 rounded-md bg-neutral-200" />
+              ) : (
+                stats.petsAdded
+              )}
+            </p>
           </div>
         </div>
 
@@ -67,9 +70,20 @@ const Overview = () => {
             <p className="text-sm font-medium text-gray-500">
               Adoption Requests
             </p>
-            <p className="text-xl font-semibold">{isLoading ? <Skeleton className="h-4 w-full" /> : stats.adoptionRequests}</p>
-            {/* {stats.pendingRequests > 0 && ( */}
-            <p className="text-xs text-red-500">Pending: {isLoading?  <Skeleton className="h-4 w-full" />: stats.pendingAdoptions}</p>
+            <p className="text-xl font-semibold">
+              {isLoading ? (
+                <Skeleton className="h-6 w-20 rounded-md bg-neutral-200" />
+              ) : (
+                stats.adoptionRequests
+              )}
+            </p>
+            <p className="text-xs text-red-500">
+              {isLoading ? (
+                <Skeleton className="h-3 w-14 rounded-md bg-neutral-200" />
+              ) : (
+                `Pending: ${stats.pendingAdoptions}`
+              )}
+            </p>
           </div>
         </div>
 
@@ -82,7 +96,13 @@ const Overview = () => {
             <p className="text-sm font-medium text-gray-500">
               Active Campaigns
             </p>
-            <p className="text-xl font-semibold">{isLoading? <Skeleton className="h-4 w-full" />: stats.activeCampaigns}</p>
+            <p className="text-xl font-semibold">
+              {isLoading ? (
+                <Skeleton className="h-6 w-20 rounded-md bg-neutral-200" />
+              ) : (
+                stats.activeCampaigns
+              )}
+            </p>
           </div>
         </div>
       </div>
@@ -97,33 +117,38 @@ const Overview = () => {
             <p className="text-sm font-medium text-gray-500">
               Total Donations Made
             </p>
-            <p className="text-2xl font-semibold">{isLoading? <Skeleton className="h-4 w-full" />: stats.totalDonations}৳</p>
+            <p className="text-2xl font-semibold">
+              {isLoading ? (
+                <Skeleton className="h-7 w-24 rounded-md bg-neutral-200" />
+              ) : (
+                `${stats.totalDonations}৳`
+              )}
+            </p>
           </div>
         </div>
-
       </div>
-        <div className="bg-white p-4 rounded-lg shadow">
-          <h2 className="text-lg font-semibold mb-4">
-            Adoption Requests Last 7 Days
-          </h2>
-          <ResponsiveContainer width="100%" height={250}>
-            <LineChart
-              data={adoptionData}
-              margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
-            >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="day" />
-              <YAxis allowDecimals={false} />
-              <Tooltip />
-              <Line
-                type="monotone"
-                dataKey="requests"
-                stroke="#3182CE"
-                strokeWidth={2}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
+      <div className="bg-white p-4 rounded-lg shadow">
+        <h2 className="text-lg font-semibold mb-4">
+          Adoption Requests Last 7 Days
+        </h2>
+        <ResponsiveContainer width="100%" height={250}>
+          <LineChart
+            data={adoptionData}
+            margin={{ top: 5, right: 20, left: 0, bottom: 5 }}
+          >
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="day" />
+            <YAxis allowDecimals={false} />
+            <Tooltip />
+            <Line
+              type="monotone"
+              dataKey="requests"
+              stroke="#3182CE"
+              strokeWidth={2}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

@@ -1,10 +1,45 @@
-import React from "react";
+import React, { useRef, useState } from "react";
 import { FaEnvelope, FaMapMarkerAlt, FaPaw, FaPhoneAlt } from "react-icons/fa";
 import contactCat from "../assets/contactbg1.png";
 import { MessageCircleMore } from "lucide-react";
-
+import useAxiosSecure from "../hooks/useAxiosSecure";
+import Swal from "sweetalert2";
+import toast from "react-hot-toast";
 
 const Contact = () => {
+  const axiosSecure = useAxiosSecure();
+  const formRef = useRef();
+  const [loading, setLoading] = useState(false);
+
+  const handleSendEmail = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData(formRef.current);
+    const emailData = {
+      fromName: formData.get("fromName"),
+      fromEmail: formData.get("fromEmail"),
+      subject: formData.get("subject"),
+      message: formData.get("message"),
+    };
+
+    console.log(emailData);
+    try {
+      const res = await axiosSecure.post("/send-mail", emailData);
+      if (res.data.success) {
+        Swal.fire({
+          icon: "success",
+          title: "Message Sent!",
+          text: "Thank you for contacting us. We will get back to you shortly.",
+          confirmButtonColor: "#018AE0",
+        });
+      }
+    } catch (error) {
+      toast.error("failed to send message");
+    } finally {
+      setLoading(false);
+    }
+  };
   return (
     <div className="mb-24" id="contact">
       <div className="text-center mb-24">
@@ -22,9 +57,7 @@ const Contact = () => {
           <img src={contactCat} alt="Cat peeking" className="h-[870px]" />
         </div>
 
-        <div
-          className="w-full max-w-lg bg-[#018AE0] text-white py-8 px-4 rounded-lg relative z-10"
-        >
+        <div className="w-full max-w-lg bg-[#018AE0] text-white py-8 px-4 rounded-lg relative z-10">
           <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-[#018AE0] p-6 rounded-full">
             <FaEnvelope className="text-3xl text-white" />
           </div>
@@ -32,7 +65,7 @@ const Contact = () => {
           <h3 className="text-2xl font-bold text-center my-10">
             Send us a message
           </h3>
-          <form>
+          <form ref={formRef} onSubmit={handleSendEmail}>
             <div className="mb-8">
               <label htmlFor="name" className="block mb-1 font-medium">
                 Name
@@ -40,6 +73,7 @@ const Contact = () => {
               <input
                 type="text"
                 id="name"
+                name="fromName"
                 className="w-full bg-transparent border-b-2 border-white/50 focus:border-[#D61C62] hover:border-[#D61C62] outline-none transition-colors"
               />
             </div>
@@ -50,6 +84,7 @@ const Contact = () => {
               <input
                 type="email"
                 id="email"
+                name="fromEmail"
                 className="w-full bg-transparent border-b-2 border-white/50 focus:border-[#D61C62] hover:border-[#D61C62] outline-none transition-colors"
               />
             </div>
@@ -60,6 +95,7 @@ const Contact = () => {
               <input
                 type="text"
                 id="subject"
+                name="subject"
                 className="w-full bg-transparent border-b-2 border-white/50 focus:border-[#D61C62] hover:border-[#D61C62] outline-none transition-colors"
               />
             </div>
@@ -69,6 +105,7 @@ const Contact = () => {
               </label>
               <textarea
                 id="message"
+                name="message"
                 rows="3"
                 className="w-full bg-transparent border-b-2 border-white/50 focus:border-[#D61C62] hover:border-[#D61C62] outline-none transition-colors"
               ></textarea>
@@ -77,7 +114,7 @@ const Contact = () => {
               type="submit"
               className="w-full bg-[#D61C62] text-white font-bold py-3 px-6 rounded-lg hover:bg-opacity-90 transition-all duration-300 shadow-md"
             >
-              SEND MESSAGE
+               {loading ? "Sending" : "SEND MESSAGE"}
             </button>
           </form>
         </div>

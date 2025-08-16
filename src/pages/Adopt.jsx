@@ -4,10 +4,11 @@ import { FaCheckSquare } from "react-icons/fa";
 import PetCard from "../components/PetCard";
 import PageTitle from "../hooks/PageTitle.";
 import Lottie from "lottie-react";
-import loader from '../../public/loader.json'
+import loader from "../../public/loader.json";
 import { useInView } from "react-intersection-observer";
 import useInfiniteAdoptPets from "../hooks/useInfiniteAdoptPets";
 import { useNavigation } from "react-router";
+import PetCardSkeleton from "../components/PetCardSkeleton";
 
 const adoptionFeatures = [
   "All pets are neutered and vaccinated.",
@@ -16,15 +17,11 @@ const adoptionFeatures = [
 ];
 
 const Adopt = () => {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-  } = useInfiniteAdoptPets();
-  const navigation = useNavigation()
+  const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+    useInfiniteAdoptPets();
+  const navigation = useNavigation();
 
-   const { ref, inView } = useInView();
+  const { ref, inView } = useInView();
 
   useEffect(() => {
     if (inView && hasNextPage) {
@@ -32,8 +29,7 @@ const Adopt = () => {
     }
   }, [inView, hasNextPage, fetchNextPage]);
 
- 
-  if (navigation.state === 'loading') {
+  if (navigation.state === "loading") {
     return (
       <div className="min-h-screen flex justify-center items-center">
         <div className="w-52">
@@ -93,16 +89,27 @@ const Adopt = () => {
         </div>
       </div>
 
-       <div className="grid grid-cols-1 md:grid-cols-2  xl:grid-cols-3 2xl:grid-cols-4 gap-8 my-24 w-4/5 mx-auto">
-        {data?.pages.map((page) =>
-          page.pets.map((pet) => <PetCard key={pet._id} pet={pet} />)
-        )}
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-8 my-24 w-4/5 mx-auto">
+        {/* Initial loading state */}
+        {!data
+          ? Array.from({ length: 8 }).map((_, i) => <PetCardSkeleton key={i} />)
+          : data.pages.map((page) =>
+              page.pets.map((pet) => <PetCard key={pet._id} pet={pet} />)
+            )}
+
+        {/* Skeletons while fetching next page */}
+        {isFetchingNextPage &&
+          Array.from({ length: 4 }).map((_, i) => (
+            <PetCardSkeleton key={`s-${i}`} />
+          ))}
       </div>
 
       <div ref={ref} className="text-center pb-10">
         {isFetchingNextPage ? (
           <p className="text-gray-600">Loading more pets...</p>
-        ) :''}
+        ) : (
+          ""
+        )}
       </div>
     </div>
   );
